@@ -1,0 +1,83 @@
+<html>
+<head>
+
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="jquery.toggler.js"></script>
+
+<style type="text/css">
+	#example1 {
+		position: relative;
+		top: 20px;
+		left: 50px;
+		display: inline;
+		border: 1px solid #333;
+		padding: 20px;
+	}
+
+	#example1.active {
+		background-color: yellow;
+	}
+</style>
+</head>
+<body>
+	<div style="float:left;">
+		<div>
+			<h4>Links</h4>
+			<a href="#" toggle="#example1">Toggle Active</a> |
+			<a href="#" toggle-off="#example1">Turn Active Off</a> |
+			<a href="#" toggle-on="#example1">Turn Active On</a>
+		</div>
+
+		<div>
+			<h4>Text input</h4>
+			Name: <input type="text" toggle="#example1" name="lastname">
+		</div>
+
+		<div>
+			<h4>Radio</h4>
+			<input  toggle-on="#example1" type="radio" name="sex" value="male">Male
+			
+			<input  toggle-off="#example1" type="radio" name="sex" value="female">Female
+		</div>
+
+		<div>
+			<h4>Checkboxes</h4>
+			<input  toggle="#example1" type="checkbox" name="vehicle" value="Bike">I have a bike<br>
+		</div>	
+
+		<div>
+			<h4>Textarea</h4>
+			<textarea toggle="#example1"></textarea><br>
+		</div>
+
+		<div>
+			<h4>Custom selectbox (only active when volvo)</h4>
+			<select toggle="#example1" toggle-handler="checkForVolvo">
+				<option value="saab">Saab</option>
+				<option value="volvo">Volvo</option>
+				<option value="mercedes">Mercedes</option>
+				<option value="audi">Audi</option>
+			</select>
+		</div>
+	</div>
+	<div>
+		<div id="example1">
+			When active I have a yellow background.
+		</div>
+	</div>
+
+	<script>
+		// special handler for selectbox above
+		$.fn.toggler.setHandler('checkForVolvo', function(selected, element, className, event, settings) {
+			if (element.val() == 'volvo')
+			{
+				selected.addClass(className);
+			} 
+			else
+			{
+				selected.removeClass(className);	
+			}
+		});
+	</script>
+</body>
+</html>
