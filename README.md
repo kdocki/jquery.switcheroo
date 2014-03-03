@@ -49,13 +49,13 @@ This is a pretty simple example. You can get pretty advanced with this plugin. F
 ```js
 	$.fn.toggler.defaults =
 	{
-		onBootstrap		  : onBootstrap,
+		onBootstrap		: onBootstrap,
 		toggleOffClass	: "",
 		toggleOnClass 	: "active",
 		eventTypes		: 'click dblclick change focusin focusout mousedown mouseup mouseover mousemove mouseout dragstart drag dragenter dragleave dragover drop dragend keypress keyup',
 
-		eventType 	: {
-			text 		  : "focusin focusout",
+		eventType 		: {
+			text 		: "focusin focusout",
 			textarea 	: "focusin focusout",
 			radio 		: "change",
 			checkbox 	: "change",
@@ -64,15 +64,15 @@ This is a pretty simple example. You can get pretty advanced with this plugin. F
 			others 		: "click"
 		},
 
-		selectors			    : {
-			toggle 			    : "toggle",
-			toggleOn 		    : "toggle-on",
-			toggleOff 		  : "toggle-off",
+		selectors			: {
+			toggle 			: "toggle",
+			toggleOn 		: "toggle-on",
+			toggleOff 		: "toggle-off",
 			toggleOffClass 	: "toggle-off-class",
 			toggleOnClass 	: "toggle-on-class",
-			eventType 		  : "toggle-event",
-			handler 		    : "toggle-handler",
-			init 			      : "toggle-init"
+			eventType 		: "toggle-event",
+			handler 		: "toggle-handler",
+			init 			: "toggle-init"
 		},
 
 		handlers: {
