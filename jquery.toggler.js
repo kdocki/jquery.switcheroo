@@ -413,7 +413,7 @@
 	{
 		toggleOffClass	: "",
 		toggleOnClass 	: "active",
-		eventTypes		: 'click dblclick change focusin focusout mousedown mouseup mouseover mousemove mouseout dragstart drag dragenter dragleave dragover drop dragend keypress keyup',
+		eventTypes		: 'click dblclick change focusin focusout mousedown mouseup mouseover mousemove mouseenter mouseout dragstart drag dragenter dragleave dragover drop dragend keypress keyup',
 		eventType 		: {
 			text 		: "focusin focusout",
 			textarea 	: "focusin focusout",
