@@ -19,7 +19,7 @@
 	{
 		var element = $(event.currentTarget);
 		var selected = $(element.attr(settings.selectors[handlerDefaultName]));
-		var handlerName = getEventHandler(element, selected, event, handlerDefaultName, settings);
+		var handlerName = getHandlerName(element, selected, event, handlerDefaultName, settings);
 		var handler = settings.handlers[handlerName];
 		var toggleClasses = getToggleClasses(element, selected, settings);
 
@@ -105,7 +105,7 @@
 	 * our event handler
 	 *
 	 */
-	function getEventHandler(element, selected, event, handlerDefaultName, settings)
+	function getHandlerName(element, selected, event, handlerDefaultName, settings)
 	{
 		var handlerName = element.attr(settings.selectors.handler);
 		var elementType = getElementType(element);
@@ -134,8 +134,13 @@
 			handlerName = 'toggleOff';
 		}
 
+		if (handlerDefaultName != 'toggle')
+		{
+			return handlerName;
+		}
+
 		// override checkboxes to see if they are selected
-		if (elementType == 'checkbox' && handlerDefaultName == 'toggle')
+		if (elementType == 'checkbox')
 		{
 			handlerName = element.is(':checked') ? 'toggleOn' : 'toggleOff';
 		}
