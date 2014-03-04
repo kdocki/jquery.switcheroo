@@ -18,12 +18,69 @@
 	function onEvent(event, handlerDefaultName, settings)
 	{
 		var element = $(event.currentTarget);
+		var elementType = getElementType(element);
 		var selected = $(element.attr(settings.selectors[handlerDefaultName]));
 		var handlerName = getHandlerName(element, selected, event, handlerDefaultName, settings);
 		var handler = settings.handlers[handlerName];
 		var toggleClasses = getToggleClasses(element, selected, settings);
 
-		return handler(selected, toggleClasses, event, settings);
+		// we treat select's a little differently because
+		// they can have options which have toggler-on/off
+		if (elementType != "select")
+		{
+			return handler(selected, toggleClasses, event, settings);
+		}
+
+		return onEventWithSelect(element, selected, toggleClasses, event, settings, handler);
+	}
+
+	/**
+	 * Handles the event with a select box. Since we can use
+	 * children options to toggle active/inactive states this
+	 * can get messy logically so it makes more sense to have it
+	 * in it's own seperate function.
+	 * 
+	 */
+	function onEventWithSelect(element, selected, toggleClasses, event, settings, handler)
+	{
+		var selectedOption = element.find(':selected');
+		var toggle = selectedOption.attr(settings.selectors.toggle);
+		var toggleOn = selectedOption.attr(settings.selectors.toggleOn);
+		var toggleOff = selectedOption.attr(settings.selectors.toggleOff);
+
+		// make sure there aren't any overrides for toggle classes
+		toggleClasses = getToggleClassesForOption(selectedOption, toggleClasses, settings);
+
+		// make sure there aren't any overrides for option handler
+		var toggleHandler = getHandlerForOption(selectedOption, selected, event, handler, settings);
+
+		// make sure that the element that will be toggled is not overridden
+		var toggleSelector = getSelectedElementForOption(selectedOption, selected, settings.selectors.toggle);
+
+		// if this element has no toggle overrides then just handle the select box...
+		if (typeof toggle === 'undefined' && typeof toggleOff === 'undefined' && typeof toggleOn === 'undefined')
+		{
+			return toggleHandler(selected, toggleClasses, event, settings);
+		}
+
+		// toggle handler
+		if (typeof toggle !== 'undefined')
+		{
+			toggleHandler(toggleSelector, toggleClasses, event, settings);
+		}
+
+		// toggleOff 
+		if (typeof toggleOff !== 'undefined')
+		{
+			toggleSelector = getSelectedElementForOption(selectedOption, selected, settings.selectors.toggleOff);
+			settings.handlers.toggleOff(toggleSelector, toggleClasses, event, settings);
+		}
+
+		if (typeof toggleOn !== 'undefined')
+		{
+			toggleSelector = getSelectedElementForOption(selectedOption, selected, settings.selectors.toggleOn);
+			settings.handlers.toggleOn(toggleSelector, toggleClasses, event, settings);
+		}
 	}
 
 	/**
@@ -168,28 +225,6 @@
 	}
 
 	/**
-	 * This is the class that we are toggling back and forth between
-	 *
-	 */
-	function getAddedClass(element, selected, settings)
-	{
-		var toggles = getToggleClasses(element, selected, settings);
-
-		return selected.hasClass(toggles.on) ? toggles.off : toggles.on;
-	}
-
-	/**
-	 * This is the class that we are toggling back and forth between
-	 *
-	 */
-	function getRemovedClass(element, selected, settings)
-	{
-		var toggles = getToggleClasses(element, selected, settings);
-
-		return !selected.hasClass(toggles.on) ? toggles.off : toggles.on;
-	}
-
-	/**
 	 * Helper function to get the class on and off toggles which can
 	 * be overridden by the user per element.
 	 *
@@ -213,6 +248,75 @@
 		}
 
 		return {on : trim(toggleOnClass), off: trim(toggleOffClass)};
+	}
+
+	/**
+	 * Returns the toggleClasses unless they have been
+	 * overriden by the child option element that is now
+	 * selected.
+	 * 
+	 */
+	function getToggleClassesForOption(element, toggleClasses, settings)
+	{
+		var classNameOverride = element.attr(settings.selectors.toggleOnClass);
+
+		if (typeof classNameOverride !== 'undefined')
+		{
+			toggleClasses.on = trim(classNameOverride);
+		}
+
+		classNameOverride = element.attr(settings.selectors.toggleOffClass);
+
+		if (typeof classNameOverride !== 'undefined')
+		{
+			toggleClasses.off = trim(classNameOverride);
+		}
+
+		return toggleClasses;
+	}
+
+	/**
+	 * Returns selected unless the option has overriden
+	 * the element that should be toggled
+	 * 
+	 */
+	function getSelectedElementForOption(element, selected, attrSelector)
+	{
+		var override = element.attr(attrSelector);
+
+		if (typeof override !== 'undefined')
+		{
+			override = trim(override);
+
+			if (override != '')
+			{
+				selected = $(override);
+			}
+		}
+
+		return selected;
+	}
+
+	/**
+	 * Returns the normal handler unless it has been overriden
+	 * by the child option element that is active
+	 * 
+	 */
+	function getHandlerForOption(element, selected, event, handler, settings)
+	{
+		var override = element.attr(settings.selectors.handler);
+
+		if (typeof override !== 'undefined')
+		{
+			handler = settings.handlers[override];
+
+			if (typeof handler === 'undefined')
+			{
+				console.warn('Could not find handler for ' + override, element);
+			}
+		}
+
+		return handler;
 	}
 
 	/**
@@ -336,12 +440,12 @@
 		handlers: {
 			toggle: function(selected, toggle, event, settings)
 			{
+				selected.toggleClass(toggle.on);
+
 				if (toggle.off != '')
 				{
 					selected.toggleClass(toggle.off, !selected.hasClass(toggle.on));
 				}
-
-				selected.toggleClass(toggle.on);
 			},
 
 			toggleOn: function(selected, toggle, event, settings)

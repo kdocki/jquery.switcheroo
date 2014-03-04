@@ -4,6 +4,22 @@
 <script src="/bower_components/jquery/dist/jquery.js"></script>
 <script src="/jquery.toggler.js"></script>
 
+<script>
+	// special handler for selectbox below
+	$.fn.toggler.setHandler('checkForVolvo', function(selected, toggle, event, settings) {
+		var element = $(event.currentTarget);
+
+		if (element.val() == 'volvo')
+		{
+			selected.addClass(toggle.on);
+		}
+		else
+		{
+			selected.removeClass(toggle.on);
+		}
+	});
+</script>
+
 <style type="text/css">
 	#example1 {
 		position: relative;
@@ -37,20 +53,5 @@
 			When active I have a yellow background.
 		</div>
 	</div>
-	<script>
-		// special handler for selectbox above
-		$.fn.toggler.setHandler('checkForVolvo', function(selected, toggle, event, settings) {
-			var element = $(event.currentTarget);
-
-			if (element.val() == 'volvo')
-			{
-				selected.addClass(toggle.on);
-			}
-			else
-			{
-				selected.removeClass(toggle.on);
-			}
-		});
-	</script>
 </body>
 </html>

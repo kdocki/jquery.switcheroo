@@ -1,0 +1,65 @@
+<html>
+<head>
+
+<script src="/bower_components/jquery/dist/jquery.js"></script>
+<script src="/jquery.toggler.js"></script>
+<script>
+	// a random shake plugin I found on stack overflow
+	jQuery.fn.shake = function(intShakes, intDistance, intDuration)
+	{
+		return this.each(function() {
+			$(this).css("position","relative"); 
+			for (var x=1; x<=intShakes; x++)
+			{
+				$(this).animate({left:(intDistance*-1)}, (((intDuration/intShakes)/4)))
+					.animate({left:intDistance}, ((intDuration/intShakes)/2))
+					.animate({left:0}, (((intDuration/intShakes)/4)));
+			}
+		});
+	};
+
+	$.fn.toggler.setHandler('shake', function(selected, toggle, event, settings) {
+		selected.shake(4, 10, 300);
+	});
+</script>
+<style type="text/css">
+	.container {
+		display: inline-block;
+	}
+
+	#box1, #box2 {
+		border: 1px solid #333;
+	}
+
+	#box1.active {
+		background-color: yellow;
+	}
+
+	#box2.active {
+		background-color: green;
+	}
+</style>
+</head>
+<body>
+	<div class="container">
+		<div>
+			<h4>Custom selectbox (toggles when values change)</h4>
+			<select data-toggler="#box1">
+				<option value="1" data-toggler-on="#box2">turn on box2</option>
+				<option value="2" data-toggler=".cool">toggle box1 &amp; box2</option>
+				<option value="3" data-toggler-off data-toggler-on="#box2">turn off box1 &amp; turn on box2</option>
+				<option value="4" data-toggler-off="#box1,#box2">turn off box1 &amp; box2</option>
+				<option value="4" data-toggler-handler="shake">shake box1</option>
+			</select>
+		</div>
+	</div>
+	<div class="container">
+		<div id="box1" class="cool">
+			When active I have a yellow background.
+		</div>
+		<div id="box2" class="cool">
+			When active I have a green background.
+		</div>
+	</div>
+</body>
+</html>
