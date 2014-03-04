@@ -49,11 +49,9 @@ This is a pretty simple example. You can get pretty advanced with this plugin. F
 ```js
 	$.fn.toggler.defaults =
 	{
-		onBootstrap		: onBootstrap,
 		toggleOffClass	: "",
 		toggleOnClass 	: "active",
 		eventTypes		: 'click dblclick change focusin focusout mousedown mouseup mouseover mousemove mouseout dragstart drag dragenter dragleave dragover drop dragend keypress keyup',
-
 		eventType 		: {
 			text 		: "focusin focusout",
 			textarea 	: "focusin focusout",
@@ -74,6 +72,8 @@ This is a pretty simple example. You can get pretty advanced with this plugin. F
 			handler 		: "toggle-handler",
 			init 			: "toggle-init"
 		},
+
+		bootstrap 	: function(element, settings) { },
 
 		handlers: {
 			toggle: function(selected, toggle, event, settings)
