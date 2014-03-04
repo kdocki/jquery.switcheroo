@@ -316,14 +316,14 @@
 		},
 
 		selectors			: {
-			toggle 			: "toggle",
-			toggleOn 		: "toggle-on",
-			toggleOff 		: "toggle-off",
-			toggleOffClass 	: "toggle-off-class",
-			toggleOnClass 	: "toggle-on-class",
-			eventType 		: "toggle-event",
-			handler 		: "toggle-handler",
-			init 			: "toggle-init"
+			toggle 			: "data-toggler",
+			toggleOn 		: "data-toggler-on",
+			toggleOff 		: "data-toggler-off",
+			toggleOffClass 	: "data-toggler-off-class",
+			toggleOnClass 	: "data-toggler-on-class",
+			eventType 		: "data-toggler-event",
+			handler 		: "data-toggler-handler",
+			init 			: "data-toggler-init"
 		},
 
 		bootstrap 	: function(element, settings) { },
