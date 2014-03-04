@@ -1,28 +1,6 @@
 /**
- * This plugin basically registers an event listener on
- * the element's children that match a selector for
- * clicks/changes/etc
- *
- * <a href="#" toggle="#foobar">Toggle foobar</a>
- * <div id="foobar">Toggle the active class on this</div>
- *
- * toggle="#foobar"
- * toggle="#foobar" toggle-on
- * toggle-class="active"
- * toggle-event="click"
- * toggle-handler="nameOfRegisteredHandler"
- *
- * Set defaults with
- *
- * $.fn.toggler.defaults.classNames = ['', 'active', 'after-active'];
- * 
- * If you use a custom handler then you need to do
- *
- * $.fn.toggler.addHandler('name', function(selected, element, className, event, settings)
- * {
- *   ...
- * }
- *
+ * @author  Kelt <kelt@dockins.org>
+ * @license  MIT
  */
 (function($)
 {
@@ -37,26 +15,15 @@
 	 * Handle different event types
 	 *
 	 */
-	function onEvent(event, handlerType, settings)
+	function onEvent(event, handlerDefaultName, settings)
 	{
 		var element = $(event.currentTarget);
-		var className = getActiveClass(element, settings);
-		var selected = element.attr(settings.selectors[handlerType]);
-		var handlerName = element.attr(settings.selectors.handler);
-
-		if (typeof handlerName === 'undefined')
-		{
-			handlerName = handlerType;
-		}
-
+		var selected = $(element.attr(settings.selectors[handlerDefaultName]));
+		var handlerName = getEventHandler(element, selected, event, handlerDefaultName, settings);
 		var handler = settings.handlers[handlerName];
+		var toggleClasses = getToggleClasses(element, selected, settings);
 
-		if (typeof handler === 'undefined')
-		{
-			console.warn('Could not find handler for ' + handlerName, element);
-		}
-
-		return handler($(selected), element, className, event, settings);
+		return handler(selected, toggleClasses, event, settings);
 	}
 
 	/**
@@ -72,29 +39,18 @@
 	 * Turn on the active class on this element
 	 *
 	 */
-	function onSwitchOn(event, settings)
+	function onToggleOn(event, settings)
 	{
-		return onEvent(event, 'switchOn', settings);
+		return onEvent(event, 'toggleOn', settings);
 	}
 
 	/**
 	 * Turn off the active class on this element
 	 *
 	 */
-	function onSwitchOff(event, settings)
+	function onToggleOff(event, settings)
 	{
-		return onEvent(event, 'switchOff', settings);
-	}
-
-	/**
-	 * When we first bootstrap the element
-	 * we want to know if there is an child
-	 * element that makes this thing active
-	 *
-	 */
-	function onBootstrap(element, settings)
-	{
-
+		return onEvent(event, 'toggleOff', settings);
 	}
 
 	/**
@@ -116,7 +72,7 @@
 
 		for (var index in eventType)
 		{
-			if (eventType[index].trim() == event.type)
+			if (trim(eventType[index])  == event.type)
 			{
 				return true;
 			}
@@ -143,6 +99,51 @@
 	}
 
 	/**
+	 * An event handler can be overridden on the attribute or it can be
+	 * different slightly for when the event.type is focusin or focusout
+	 * or if the element type is a radio or checkbox. This functions gets
+	 * our event handler
+	 *
+	 */
+	function getEventHandler(element, selected, event, handlerDefaultName, settings)
+	{
+		var handlerName = element.attr(settings.selectors.handler);
+		var elementType = getElementType(element);
+
+		// overrides the default handler from element's attribute
+		if (typeof handlerName !== 'undefined')
+		{
+			if (typeof settings.handlers[handlerName] === 'undefined')
+			{
+				console.warn('Could not find handler for ' + handlerName, element);
+			}
+
+			return handlerName;
+		}
+
+		// use default since an override was not found
+		handlerName = handlerDefaultName;
+
+		// override the focus events for like textareas
+		if (event.type == 'focusin')
+		{
+			handlerName = 'toggleOn';
+		}
+		else if (event.type == 'focusout')
+		{
+			handlerName = 'toggleOff';
+		}
+
+		// override checkboxes to see if they are selected
+		if (elementType == 'checkbox' && handlerDefaultName == 'toggle')
+		{
+			handlerName = element.is(':checked') ? 'toggleOn' : 'toggleOff';
+		}
+
+		return handlerName;
+	}
+
+	/**
 	 * Get the default event type for an element. This differs
 	 * based on what type the element is. If it is an input type
 	 * of text or checkbox or select or a href element then we
@@ -162,19 +163,61 @@
 	}
 
 	/**
-	 * Return the class we should toggle between here
+	 * This is the class that we are toggling back and forth between
 	 *
 	 */
-	function getActiveClass(element, settings)
+	function getAddedClass(element, selected, settings)
 	{
-		var classNameOverride = element.attr(settings.selectors.className);
+		var toggles = getToggleClasses(element, selected, settings);
 
-		if (typeof classNameOverride != 'undefined')
+		return selected.hasClass(toggles.on) ? toggles.off : toggles.on;
+	}
+
+	/**
+	 * This is the class that we are toggling back and forth between
+	 *
+	 */
+	function getRemovedClass(element, selected, settings)
+	{
+		var toggles = getToggleClasses(element, selected, settings);
+
+		return !selected.hasClass(toggles.on) ? toggles.off : toggles.on;
+	}
+
+	/**
+	 * Helper function to get the class on and off toggles which can
+	 * be overridden by the user per element.
+	 *
+	 */
+	function getToggleClasses(element, selected, settings)
+	{
+		var classNameOverride = element.attr(settings.selectors.toggleOnClass);
+		var toggleOnClass = settings.toggleOnClass;
+		var toggleOffClass = settings.toggleOffClass;
+
+		if (typeof classNameOverride !== 'undefined')
 		{
-			return classNameOverride;
+			toggleOnClass = classNameOverride;
 		}
 
-		return settings.className;
+		classNameOverride = element.attr(settings.selectors.toggleOffClass);
+
+		if (typeof classNameOverride !== 'undefined')
+		{
+			toggleOffClass = classNameOverride;
+		}
+
+		return {on : trim(toggleOnClass), off: trim(toggleOffClass)};
+	}
+
+	/**
+	 * Trim a string's whitespace. We use this because IE8 doesn't
+	 * have the String.prototype.trim fucntion.
+	 *
+	 */
+	function trim(string)
+	{
+		return string.replace(/^\s+|\s+$/g, '');
 	}
 
 	/**
@@ -201,10 +244,10 @@
 	function register(element, settings)
 	{
 		$(element).on(settings.eventTypes, '['+settings.selectors.toggle+']', handleEvent(settings, onToggle));
-		$(element).on(settings.eventTypes, '['+settings.selectors.switchOn+']', handleEvent(settings, onSwitchOn));
-		$(element).on(settings.eventTypes, '['+settings.selectors.switchOff+']', handleEvent(settings, onSwitchOff));
+		$(element).on(settings.eventTypes, '['+settings.selectors.toggleOn+']', handleEvent(settings, onToggleOn));
+		$(element).on(settings.eventTypes, '['+settings.selectors.toggleOff+']', handleEvent(settings, onToggleOff));
 
-		settings.onBootstrap($(element), settings);
+		settings.bootstrap($(element), settings);
 	}
 
 	/**
@@ -238,7 +281,7 @@
 	 * Sets a handler in our handler registry. This allows
 	 * us to do custom handlers for switch events if we
 	 * choose to do so. Else we just fallback to the normal
-	 * stuff, like toggle, switchOn and switchOff.
+	 * stuff, like toggle, toggleOn and toggleOff.
 	 *
 	 */
 	$.fn.toggler.setHandler = function(name, handler)
@@ -257,86 +300,77 @@
 	 * Defaults for this plugin
 	 *
 	 */
-	$.fn.toggler.defaults = {
-		className : "active",
-		onBootstrap: onBootstrap,
-		eventTypes: 'click dblclick change focusin focusout mousedown mouseup mouseover mousemove mouseout dragstart drag dragenter dragleave dragover drop dragend keypress keyup',
-		eventType: {
-			text: "focusin focusout",
-			textarea: "focusin focusout",
-			radio: "change",
-			checkbox: "change",
-			select: "change",
-			others: "click"
+	$.fn.toggler.defaults =
+	{
+		toggleOffClass	: "",
+		toggleOnClass 	: "active",
+		eventTypes		: 'click dblclick change focusin focusout mousedown mouseup mouseover mousemove mouseout dragstart drag dragenter dragleave dragover drop dragend keypress keyup',
+		eventType 		: {
+			text 		: "focusin focusout",
+			textarea 	: "focusin focusout",
+			radio 		: "change",
+			checkbox 	: "change",
+			select 		: "change",
+			option 		: "change",
+			others 		: "click"
 		},
-		selectors: {
-			className: "toggle-class",
-			toggle: "toggle",
-			switchOn: "toggle-on",
-			switchOff: "toggle-off",
-			eventType: "toggle-event",
-			handler: "toggle-handler",
-			init: "toggle-init"
+
+		selectors			: {
+			toggle 			: "toggle",
+			toggleOn 		: "toggle-on",
+			toggleOff 		: "toggle-off",
+			toggleOffClass 	: "toggle-off-class",
+			toggleOnClass 	: "toggle-on-class",
+			eventType 		: "toggle-event",
+			handler 		: "toggle-handler",
+			init 			: "toggle-init"
 		},
+
+		bootstrap 	: function(element, settings) { },
+
 		handlers: {
-			toggle: function(selected, element, className, event, settings)
+			toggle: function(selected, toggle, event, settings)
 			{
-				var elementType = getElementType(element);
-				var eventType = getEventType(element, settings);
-
-				// focus events
-				if (event.type == 'focusin')
+				if (toggle.off != '')
 				{
-					return settings.handlers.switchOn.apply(this, arguments);
-				}
-				else if (event.type == 'focusout')
-				{
-					return settings.handlers.switchOff.apply(this, arguments);
+					selected.toggleClass(toggle.off, !selected.hasClass(toggle.on));
 				}
 
-				// checkboxes
-				if (elementType == 'radio' || elementType == 'checkbox')
-				{
-					if (element.is(':checked'))
-					{				
-						return settings.handlers.switchOn.apply(this, arguments);
-					}
-
-					return settings.handlers.switchOff.apply(this, arguments);
-				}
-
-				// all other types and events
-				if (selected.hasClass(className))
-				{
-					return settings.handlers.switchOff.apply(this, arguments);
-				}
-
-				return settings.handlers.switchOn.apply(this, arguments);
+				selected.toggleClass(toggle.on);
 			},
 
-			switchOn: function(selected, element, className, event, settings)
+			toggleOn: function(selected, toggle, event, settings)
 			{
-				if (!selected.hasClass(className))
+				if (!selected.hasClass(toggle.on))
 				{
-					selected.addClass(className);
+					selected.addClass(toggle.on);
+				}
+
+				if (toggle.off != "" && selected.hasClass(toggle.off))
+				{
+					selected.removeClass(toggle.off);
 				}
 			},
 
-			switchOff: function(selected, element, className, event, settings)
+			toggleOff: function(selected, toggle, className, event, settings)
 			{
-				if (selected.hasClass(className))
+				if (selected.hasClass(toggle.on))
 				{
-					selected.removeClass(className);
+					selected.removeClass(toggle.on);
+				}
+
+				if (toggle.off != "" && !selected.hasClass(toggle.off))
+				{
+					selected.addClass(toggle.off);
 				}
 			}
 		}
 	};
 
 	/**
-	 * this is a self initializing plugin but can be stopped
+	 * Self initializing plugin but can be stopped
 	 * by overriding the [toggle-init] on the page
 	 *
-	 * @return {[type]} [description]
 	 */
 	$(function()
 	{

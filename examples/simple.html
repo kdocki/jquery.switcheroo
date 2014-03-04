@@ -1,8 +1,8 @@
 <html>
 <head>
 
-<script src="bower_components/jquery/dist/jquery.js"></script>
-<script src="jquery.toggler.js"></script>
+<script src="/bower_components/jquery/dist/jquery.js"></script>
+<script src="/jquery.toggler.js"></script>
 
 <style type="text/css">
 	#example1 {
@@ -22,62 +22,48 @@
 <body>
 	<div style="float:left;">
 		<div>
-			<h4>Links</h4>
+			<h4>Links (toggles when clicked)</h4>
 			<a href="#" toggle="#example1">Toggle Active</a> |
 			<a href="#" toggle-off="#example1">Turn Active Off</a> |
 			<a href="#" toggle-on="#example1">Turn Active On</a>
 		</div>
 
 		<div>
-			<h4>Text input</h4>
+			<h4>Text input (toggles when focused)</h4>
 			Name: <input type="text" toggle="#example1" name="lastname">
 		</div>
 
 		<div>
-			<h4>Radio</h4>
+			<h4>Radio (toggles when checked)</h4>
 			<input  toggle-on="#example1" type="radio" name="sex" value="male">Male
-			
+
 			<input  toggle-off="#example1" type="radio" name="sex" value="female">Female
 		</div>
 
 		<div>
-			<h4>Checkboxes</h4>
+			<h4>Checkboxes (toggles when checked)</h4>
 			<input  toggle="#example1" type="checkbox" name="vehicle" value="Bike">I have a bike<br>
-		</div>	
+		</div>
 
 		<div>
-			<h4>Textarea</h4>
+			<h4>Textarea (toggles on focus)</h4>
 			<textarea toggle="#example1"></textarea><br>
 		</div>
 
 		<div>
-			<h4>Custom selectbox (only active when volvo)</h4>
-			<select toggle="#example1" toggle-handler="checkForVolvo">
+			<h4>Custom selectbox (toggles when values change)</h4>
+			<select toggle="#example1">
 				<option value="saab">Saab</option>
-				<option value="volvo">Volvo</option>
-				<option value="mercedes">Mercedes</option>
-				<option value="audi">Audi</option>
+				<option value="volvo" toggle-off="#example1">Volvo</option>
+				<option value="mercedes" toggle-on="#example1">Mercedes</option>
+				<option value="audi" toggle-on="#example1">Audi</option>
 			</select>
 		</div>
 	</div>
 	<div>
-		<div id="example1">
+		<div id="example1" class="cool">
 			When active I have a yellow background.
 		</div>
 	</div>
-
-	<script>
-		// special handler for selectbox above
-		$.fn.toggler.setHandler('checkForVolvo', function(selected, element, className, event, settings) {
-			if (element.val() == 'volvo')
-			{
-				selected.addClass(className);
-			} 
-			else
-			{
-				selected.removeClass(className);	
-			}
-		});
-	</script>
 </body>
 </html>
