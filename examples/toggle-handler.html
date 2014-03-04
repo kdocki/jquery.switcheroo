@@ -39,14 +39,16 @@
 	</div>
 	<script>
 		// special handler for selectbox above
-		$.fn.toggler.setHandler('checkForVolvo', function(selected, element, className, event, settings) {
+		$.fn.toggler.setHandler('checkForVolvo', function(selected, toggle, event, settings) {
+			var element = $(event.currentTarget);
+
 			if (element.val() == 'volvo')
 			{
-				selected.addClass(className);
+				selected.addClass(toggle.on);
 			}
 			else
 			{
-				selected.removeClass(className);
+				selected.removeClass(toggle.on);
 			}
 		});
 	</script>
