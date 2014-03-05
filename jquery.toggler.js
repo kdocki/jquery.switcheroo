@@ -19,7 +19,14 @@
 	{
 		var element = $(event.currentTarget);
 		var elementType = getElementType(element);
-		var selected = $(element.attr(settings.selectors[handlerDefaultName]));
+		var selector = element.attr(settings.selectors[handlerDefaultName]);
+		var selected = element;
+
+		if (selector != '')
+		{
+			selected = element.closest('[' + settings.selectors.registered + ']').find(selector);
+		}
+
 		var handlerName = getHandlerName(element, selected, event, handlerDefaultName, settings);
 		var handler = settings.handlers[handlerName];
 		var toggleClasses = getToggleClasses(element, selected, settings);
@@ -39,7 +46,7 @@
 	 * children options to toggle active/inactive states this
 	 * can get messy logically so it makes more sense to have it
 	 * in it's own seperate function.
-	 * 
+	 *
 	 */
 	function onEventWithSelect(element, selected, toggleClasses, event, settings, handler)
 	{
@@ -69,7 +76,7 @@
 			toggleHandler(toggleSelector, toggleClasses, event, settings);
 		}
 
-		// toggleOff 
+		// toggleOff
 		if (typeof toggleOff !== 'undefined')
 		{
 			toggleSelector = getSelectedElementForOption(selectedOption, selected, settings.selectors.toggleOff);
@@ -81,33 +88,6 @@
 			toggleSelector = getSelectedElementForOption(selectedOption, selected, settings.selectors.toggleOn);
 			settings.handlers.toggleOn(toggleSelector, toggleClasses, event, settings);
 		}
-	}
-
-	/**
-	 * Toggle the active class on this element
-	 *
-	 */
-	function onToggle(event, settings)
-	{
-		return onEvent(event, 'toggle', settings);
-	}
-
-	/**
-	 * Turn on the active class on this element
-	 *
-	 */
-	function onToggleOn(event, settings)
-	{
-		return onEvent(event, 'toggleOn', settings);
-	}
-
-	/**
-	 * Turn off the active class on this element
-	 *
-	 */
-	function onToggleOff(event, settings)
-	{
-		return onEvent(event, 'toggleOff', settings);
 	}
 
 	/**
@@ -254,7 +234,7 @@
 	 * Returns the toggleClasses unless they have been
 	 * overriden by the child option element that is now
 	 * selected.
-	 * 
+	 *
 	 */
 	function getToggleClassesForOption(element, toggleClasses, settings)
 	{
@@ -278,7 +258,7 @@
 	/**
 	 * Returns selected unless the option has overriden
 	 * the element that should be toggled
-	 * 
+	 *
 	 */
 	function getSelectedElementForOption(element, selected, attrSelector)
 	{
@@ -300,7 +280,7 @@
 	/**
 	 * Returns the normal handler unless it has been overriden
 	 * by the child option element that is active
-	 * 
+	 *
 	 */
 	function getHandlerForOption(element, selected, event, handler, settings)
 	{
@@ -333,13 +313,16 @@
 	 * Returns a closure for handling the event. This
 	 * takes into account the settings as well.
 	 */
-	function handleEvent(settings, handler)
+	function handleEvent(settings, handler, eventType)
 	{
 		return function(event)
 		{
+			// we don't want to trigger this on mouseover
+			// or other events when we just want click event
+			// or another specific event
 			if (isMatchingEventType(event, settings))
 			{
-				handler(event, settings);
+				handler(event, eventType, settings);
 			}
 		}
 	}
@@ -349,12 +332,41 @@
 	 * will search through all the children of the element
 	 * and use the selectors for all given events.
 	 *
+	 * We also want to ensure we don't register listeners
+	 * on the same element twice as this would cause lots
+	 * of head aches.
+	 *
 	 */
 	function register(element, settings)
 	{
-		$(element).on(settings.eventTypes, '['+settings.selectors.toggle+']', handleEvent(settings, onToggle));
-		$(element).on(settings.eventTypes, '['+settings.selectors.toggleOn+']', handleEvent(settings, onToggleOn));
-		$(element).on(settings.eventTypes, '['+settings.selectors.toggleOff+']', handleEvent(settings, onToggleOff));
+		var isAlreadyRegistered = $(element).attr(settings.selectors.registered);
+
+		if (isAlreadyRegistered === "true" || isAlreadyRegistered === true)
+		{
+			return;
+		}
+
+		// check if parent has been registered, we should not do nested
+		// data-toggler-inits, but we should childproof just in case
+		var parentInitializer = $(element).closest('[' + settings.selectors.registered + ']');
+
+		if (parentInitializer.length > 0)
+		{
+			console.warn('not registering', element, 'because it has registered parent', parentInitializer);
+			return;
+		}
+
+		// register events in a specific order
+		for (var index in settings.eventOrdering)
+		{
+			var eventType = settings.eventOrdering[index];
+			$(element).on(settings.eventTypes, '['+settings.selectors[eventType]+']', handleEvent(settings, onEvent, eventType));
+		}
+
+
+		$(element).settings = settings;
+		$(element).setHandler = $.fn.toggler.setHandler;
+		$(element).attr(settings.selectors.registered, true);
 
 		settings.bootstrap($(element), settings);
 	}
@@ -370,20 +382,10 @@
 	{
 		var settings = $.extend( {}, $.fn.toggler.defaults, options );
 
-		var selector = this.selector;
-
-		if (typeof registered[selector] === 'undefined')
+		return this.each(function (index, element)
 		{
-			registered[selector] = this.each(function (index, element)
-			{
-				register(element, settings);
-			});
-
-			registered[selector].settings = settings;
-			registered[selector].setHandler = $.fn.toggler.setHandler;
-		}
-
-		return registered[selector];
+			register(element, settings);
+		});
 	};
 
 	/**
@@ -411,8 +413,10 @@
 	 */
 	$.fn.toggler.defaults =
 	{
+		animateDelay	: 1000,
 		toggleOffClass	: "",
 		toggleOnClass 	: "active",
+		eventOrdering 	: ['toggle', 'toggleOff', 'toggleOn', 'animate'],
 		eventTypes		: 'click dblclick change focusin focusout mousedown mouseup mouseover mousemove mouseenter mouseout dragstart drag dragenter dragleave dragover drop dragend keypress keyup',
 		eventType 		: {
 			text 		: "focusin focusout",
@@ -425,6 +429,7 @@
 		},
 
 		selectors			: {
+			animate 		: "data-toggler-animate",
 			toggle 			: "data-toggler",
 			toggleOn 		: "data-toggler-on",
 			toggleOff 		: "data-toggler-off",
@@ -432,46 +437,38 @@
 			toggleOnClass 	: "data-toggler-on-class",
 			eventType 		: "data-toggler-event",
 			handler 		: "data-toggler-handler",
-			init 			: "data-toggler-init"
+			init 			: "data-toggler-init",
+			registered 		: "data-toggler-registered"
 		},
 
 		bootstrap 	: function(element, settings) { },
 
 		handlers: {
+			animate: function(selected, toggle, event, settings)
+			{
+				settings.handlers.toggle(selected, toggle, event, settings);
+				setTimeout(function() { settings.handlers.toggle(selected, toggle, event, settings); }, settings.animateDelay);
+			},
+
 			toggle: function(selected, toggle, event, settings)
 			{
 				selected.toggleClass(toggle.on);
 
-				if (toggle.off != '')
-				{
-					selected.toggleClass(toggle.off, !selected.hasClass(toggle.on));
-				}
+				selected.toggleClass(toggle.off, !selected.hasClass(toggle.on));
 			},
 
 			toggleOn: function(selected, toggle, event, settings)
 			{
-				if (!selected.hasClass(toggle.on))
-				{
-					selected.addClass(toggle.on);
-				}
+				selected.addClass(toggle.on);
 
-				if (toggle.off != "" && selected.hasClass(toggle.off))
-				{
-					selected.removeClass(toggle.off);
-				}
+				selected.removeClass(toggle.off);
 			},
 
 			toggleOff: function(selected, toggle, className, event, settings)
 			{
-				if (selected.hasClass(toggle.on))
-				{
-					selected.removeClass(toggle.on);
-				}
+				selected.removeClass(toggle.on);
 
-				if (toggle.off != "" && !selected.hasClass(toggle.off))
-				{
-					selected.addClass(toggle.off);
-				}
+				selected.addClass(toggle.off);
 			}
 		}
 	};
@@ -484,21 +481,30 @@
 	$(function()
 	{
 		var selector = $.fn.toggler.defaults.selectors.init;
-		var initializer = $('['+selector+']');
 
-		if (initializer.length == 0)
+		if ($('['+selector+']').length == 0)
 		{
 			return $('body').toggler();
 		}
 
-		var element = initializer.attr(selector);
-
-		if (element == "false" || element == false)
+		$('['+selector+']').each(function(index, initializer)
 		{
-			return;
-		}
+			initializer = $(initializer);
 
-		return initializer.toggler();
+			var element = initializer.attr(selector);
+
+			if (element === "false" || element === false)
+			{
+				return;
+			}
+
+			if (trim(element) != '')
+			{
+				return $(element).toggler();
+			}
+
+			return initializer.toggler();
+		});
 	});
 
 })(jQuery);

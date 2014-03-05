@@ -1,3 +1,58 @@
-manual-initialization.html
+<html>
+<head>
 
-show how to manually initialize this plugin
+<script src="/bower_components/jquery/dist/jquery.js"></script>
+<script src="/jquery.toggler.js"></script>
+
+<script>
+	$(function()
+	{
+		$('.init.btn').click(function()
+		{
+			$('[data-toggler="#box1"]').text('Cool, I have initialized. Try mousing over me now. ^_^');
+
+			$('body').toggler();
+		});
+	});
+</script>
+
+<style type="text/css">
+	.container {
+		display: inline-block;
+		max-width: 200px;
+	}
+
+	#box1, #box2 {
+		border: 1px solid #333;
+	}
+
+	#box1.active {
+		background-color: yellow;
+	}
+
+	#box2.active {
+		background-color: green;
+	}
+</style>
+</head>
+<body data-toggler-init="false">
+	<div style="margin: 30px;">
+		<a href="#" class="init btn">Click me to initialize the plugin</a>
+	</div>
+
+	<div>
+		<div class="main container">
+			<div data-toggler="#box1" data-toggler-event="mouseenter mouseout">
+				This won't work until you initialize the plugin.
+			</div>
+		</div>
+
+		<div class="container">
+			<div id="box1" class="cool">
+				When active I have a yellow background.
+			</div>
+		</div>
+
+	</div>
+</body>
+</html>

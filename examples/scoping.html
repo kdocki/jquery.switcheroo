@@ -1,0 +1,97 @@
+<html>
+<head>
+
+<script src="/bower_components/jquery/dist/jquery.js"></script>
+<script src="/jquery.toggler.js"></script>
+
+<style type="text/css">
+	.container {
+		display: inline-block;
+		width: 200px;
+	}
+
+	.box {
+		border: 1px solid #333;
+	}
+
+	.box.active {
+		background-color: yellow;
+	}
+
+	.bottom-margin {
+		margin-bottom: 10px;
+		padding: 10px;
+		border-bottom: 1px solid #333;
+	}
+</style>
+</head>
+
+<body>
+	<p style="width: 400px;">Anything that is scoped will trigger the active/inactive toggle on mouseenter/ouseout. Notice that all these are using the .box class but they don't interfere with each other because they are correctly scoped to their data-toggler-init parents.</p>
+
+	<div class="bottom-margin" data-toggler-init>
+		<div class="container">
+			<div data-toggler=".box" data-toggler-event="mouseenter mouseout">
+			This will work because we have scopped.
+			</div>
+		</div>
+
+		<div class="container">
+			<div class="box">
+				When active I have a yellow background.
+			</div>
+		</div>
+	</div>
+
+	<div class="bottom-margin" >
+		<div class="container">
+			<div data-toggler=".box" data-toggler-event="mouseenter mouseout">
+				This won't ever trigger a toggle.
+			</div>
+		</div>
+
+		<div class="container">
+			<div class="box">
+				When active I have a yellow background.
+			</div>
+		</div>
+	</div>
+
+	<div class="bottom-margin" data-toggler-init>
+		<div class="container">
+			<div data-toggler=".box" data-toggler-event="mouseenter mouseout">
+			This will work because we have scopped.
+			</div>
+		</div>
+
+		<div class="container">
+			<div class="box">
+				When active I have a yellow background.
+			</div>
+		</div>
+	</div>
+
+	<div class="bottom-margin" data-toggler-init=".subcontainer">
+		<div class="container">
+			<div data-toggler=".box" data-toggler-event="mouseenter mouseout">
+				This is not scoped because it is not in the .subcontainer class
+			</div>
+		</div>
+
+		<div class="subcontainer">
+			<div class="container">
+				<div data-toggler=".box" data-toggler-event="mouseenter mouseout">
+					<b>But this is.</b>
+				</div>
+			</div>
+
+			<div class="container">
+				<div class="box">
+					When active I have a yellow background.
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

@@ -1,69 +1,117 @@
 <html>
 <head>
+	<script src="/bower_components/jquery/dist/jquery.js"></script>
+	<script src="/jquery.toggler.js"></script>
+	<style type="text/css">
+		.frame {
+			height: 100px;
+			display: inline-block;
+			cursor: hand;
+		}
 
-<script src="/bower_components/jquery/dist/jquery.js"></script>
-<script src="/jquery.toggler.js"></script>
+		.about-section {
+			position:relative;
+			margin-top: 30px;
+			width: 400px;
+		}
 
-<style type="text/css">
-	#example1 {
-		position: relative;
-		top: 20px;
-		left: 50px;
-		display: inline;
-		border: 1px solid #333;
-		padding: 20px;
-	}
+		.fade-in {
+			opacity: 0;
+		}
 
-	#example1.active {
-		background-color: yellow;
-	}
-</style>
+		.fade-in.active {
+			opacity: 1;
+		}
+
+		.about {
+			position: absolute;
+		}
+
+		.valign {
+			display: inline-block;
+			vertical-align: middle;
+		}
+
+		img {
+			border: 4px double #aca;
+			vertical-align: top;
+			height: 100px;
+			border-radius: 2px;
+		}
+
+		.frame-section.active > .frame > img {
+			opacity: .3;
+		}
+
+		.frame-section.active > .frame.active > img {
+			border-style: none;
+			opacity: 1;
+			border-style: solid;
+		}
+
+		.transition {
+			-webkit-transition: all 1s ease;
+			-moz-transition: all 1s ease;
+			-o-transition: all 1s ease;
+			-ms-transition: all 1s ease;
+			transition: all 1s ease;
+		}
+
+		.transition.fast {
+			-webkit-transition: all 0.1s ease;
+			-moz-transition: all 0.1s ease;
+			-o-transition: all 0.1s ease;
+			-ms-transition: all 0.1s ease;
+			transition: all 0.1s ease;
+		}
+	</style>
 </head>
 <body>
-	<div style="float:left;">
-		<div>
-			<h4>Links (toggles when clicked)</h4>
-			<a href="#" data-toggler="#example1">Toggle Active</a> |
-			<a href="#" data-toggler-off="#example1">Turn Active Off</a> |
-			<a href="#" data-toggler-on="#example1">Turn Active On</a>
+
+	<h3>Select a photo</h3>
+
+	<div class="frame-section">
+		<div class="frame one transition" data-toggler-off=".about,.frame" data-toggler-on=".frame.one,.about.one,.frame-section">
+			<span class="valign"></span>
+			<img class="photo" src="http://placekitten.com/g/200/300">
 		</div>
-
-		<div>
-			<h4>Text input (toggles when focused)</h4>
-			Name: <input type="text" data-toggler="#example1" name="lastname">
+		<div class="frame two transition" data-toggler-off=".about,.frame" data-toggler-on=".frame.two,.about.two,.frame-section">
+			<span class="valign"></span>
+			<img class="photo" src="http://placekitten.com/g/200/350">
 		</div>
-
-		<div>
-			<h4>Radio (toggles when checked)</h4>
-			<input  data-toggler-on="#example1" type="radio" name="sex" value="male">Male
-
-			<input  data-toggler-off="#example1" type="radio" name="sex" value="female">Female
+		<div class="frame three transition" data-toggler-off=".about,.frame" data-toggler-on=".frame.three,.about.three,.frame-section">
+			<span class="valign"></span>
+			<img class="photo" src="http://placekitten.com/g/200/140">
 		</div>
-
-		<div>
-			<h4>Checkboxes (toggles when checked)</h4>
-			<input  data-toggler="#example1" type="checkbox" name="vehicle" value="Bike">I have a bike<br>
-		</div>
-
-		<div>
-			<h4>Textarea (toggles on focus)</h4>
-			<textarea data-toggler="#example1"></textarea><br>
-		</div>
-
-		<div>
-			<h4>Custom selectbox (toggles when values change)</h4>
-			<select data-toggler="#example1">
-				<option value="saab">Saab</option>
-				<option value="volvo" data-toggler-off="#example1">Volvo</option>
-				<option value="mercedes" data-toggler-on="#example1">Mercedes</option>
-				<option value="audi" data-toggler-on="#example1">Audi</option>
-			</select>
+		<div class="frame four transition" data-toggler-off=".about,.frame" data-toggler-on=".frame.four,.about.four,.frame-section">
+			<span class="valign"></span>
+			<img class="photo" src="http://placekitten.com/g/200/200">
 		</div>
 	</div>
-	<div>
-		<div id="example1" class="cool">
-			When active I have a yellow background.
+
+	<div class="about-section">
+		<div class="about fade-in transition one">
+			<h4>No javascript here, bub!</h4>
+			<p>You can use different toggles and combine them to make a powerful combination of display logic.</p>
 		</div>
+
+		<div class="about fade-in transition two">
+			<h4>What is the order of execution though when you have multiple events?</h4>
+			<p>The important thing to remember is the default event ordering is,</p>	
+			<ol>
+				<li>toggle</li>
+				<li>toggle-off</li>
+				<li>toggle-on</li>
+			</ol>
+		</div>
+		<div class="about fade-in transition three">
+			<h4>Change <code>eventOrdering</code> for different event pattern</h4>
+			<p>You can always change this in the defaults though by changing <code>$.fn.toggler.defaults.eventOrdering</code></p>
+		</div>
+		<div class="about fade-in transition four">
+			<h4>I leave you with, a lovely poem</h4>
+			<p>When you see a cat walking on the moon, did he have a dish and silver spoon? A dog who laughed and cow who was fat, never saw them again after that.</p>
+		<div>
 	</div>
 </body>
 </html>
