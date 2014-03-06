@@ -13,7 +13,7 @@ module.exports = function(grunt) {
       livereload: {
         files: [
           'examples/**',
-          "jquery.toggler.js"
+          "jquery.switcheroo.js"
         ],
         options: {
           livereload: true

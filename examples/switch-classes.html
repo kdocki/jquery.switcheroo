@@ -1,0 +1,72 @@
+<html>
+<head>
+
+<script src="/bower_components/jquery/dist/jquery.js"></script>
+<script src="/jquery.switcheroo.js"></script>
+
+<style type="text/css">
+	#example1 {
+		position: relative;
+		top: 20px;
+		left: 50px;
+		display: inline;
+		border: 1px solid #333;
+		padding: 20px;
+	}
+
+	#example1.yellow {
+		background-color: yellow;
+	}
+	
+	#example1.green {
+		background-color: green;
+	}
+
+	#example1.blue {
+		background-color: blue;
+	}
+
+	#example1.active {
+		border: 5px solid #abc;
+	}
+</style>
+</head>
+<body>
+	<div style="float:left;">
+		<div>
+			<h4>Links (toggles when clicked)</h4>
+			<a href="#" data-switch="#example1" data-switch-class="[yellow, green, blue]">Toggle Colors</a> |
+
+			<a href="#" data-switch="#example1" data-switch-step="-1" data-switch-class="[yellow, green, blue]">Toggle Colors Backwards</a>
+
+			<br>
+			<br>
+
+			<a href="#" data-switch-off="#example1" data-switch-class="[yellow, green, blue]">Turn Color Yellow</a> |
+
+			<a href="#" data-switch="#example1" data-switch-to="green" data-switch-class="[yellow, green, blue]">Turn Color Green</a> |
+
+			<a href="#" data-switch-on="#example1" data-switch-class="[yellow, green, blue]">Turn Color Blue</a>
+
+			<br>
+			<br>
+
+			<a href="#" data-switch-on="#example1" data-switch-class="[yellow, green, blue]" data-switch-step>Toggle Colors Forwards, Stop At Blue</a> |
+
+			<a href="#" data-switch-off="#example1" data-switch-class="[yellow, green, blue]" data-switch-step>Toggle Colors Backwards, Stop At Yellow</a>
+
+			<br>
+			<br>
+
+			<a href="#" data-switch="#example1">Toggle Active</a> |
+			<a href="#" data-switch-off="#example1">Turn Active Off</a> |
+			<a href="#" data-switch-on="#example1">Turn Active On</a>
+		</div>
+	</div>
+	<div>
+		<div id="example1" class="">
+			<spanThe <code>data-switch-classes</code> is <code>[yellow, green, blue]</code>.
+		</div>
+	</div>
+</body>
+</html>
