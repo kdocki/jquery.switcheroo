@@ -2,7 +2,7 @@
 <head>
 
 <script src="/bower_components/jquery/dist/jquery.js"></script>
-<script src="/jquery.toggler.js"></script>
+<script src="/jquery.switcheroo.js"></script>
 <script>
 	// a random shake plugin I found on stack overflow
 	jQuery.fn.shake = function(intShakes, intDistance, intDuration)
@@ -18,7 +18,7 @@
 		});
 	};
 
-	$.fn.toggler.setHandler('shake', function(selected, toggle, event, settings) {
+	$.fn.switcheroo.setHandler('shake', function(selected, toggle, event, settings) {
 		selected.shake(4, 10, 300);
 	});
 </script>
@@ -44,12 +44,12 @@
 	<div class="container">
 		<div>
 			<h4>Custom selectbox (toggles when values change)</h4>
-			<select data-toggler="#box1">
-				<option value="1" data-toggler-on="#box2">turn on box2</option>
-				<option value="2" data-toggler=".cool">toggle box1 &amp; box2</option>
-				<option value="3" data-toggler-off data-toggler-on="#box2">turn off box1 &amp; turn on box2</option>
-				<option value="4" data-toggler-off="#box1,#box2">turn off box1 &amp; box2</option>
-				<option value="4" data-toggler-handler="shake">shake box1</option>
+			<select data-switch="#box1">
+				<option value="1" data-switch-on="#box2">turn on box2</option>
+				<option value="2" data-switch=".cool">toggle box1 &amp; box2</option>
+				<option value="3" data-switch-off data-switch-on="#box2">turn off box1 &amp; turn on box2</option>
+				<option value="4" data-switch-off="#box1,#box2">turn off box1 &amp; box2</option>
+				<option value="4" data-switch-handler="shake">shake box1</option>
 			</select>
 		</div>
 	</div>

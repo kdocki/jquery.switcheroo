@@ -2,16 +2,16 @@
 <head>
 
 <script src="/bower_components/jquery/dist/jquery.js"></script>
-<script src="/jquery.toggler.js"></script>
+<script src="/jquery.switcheroo.js"></script>
 
 <script>
 	$(function()
 	{
 		$('.init.btn').click(function()
 		{
-			$('[data-toggler="#box1"]').text('Cool, I have initialized. Try mousing over me now. ^_^');
+			$('[data-switch="#box1"]').text('Cool, I have initialized. Try mousing over me now. ^_^');
 
-			$('body').toggler();
+			$('body').switcheroo();
 		});
 	});
 </script>
@@ -35,14 +35,14 @@
 	}
 </style>
 </head>
-<body data-toggler-init="false">
+<body data-switch-init="false">
 	<div style="margin: 30px;">
 		<a href="#" class="init btn">Click me to initialize the plugin</a>
 	</div>
 
 	<div>
 		<div class="main container">
-			<div data-toggler="#box1" data-toggler-event="mouseenter mouseout">
+			<div data-switch="#box1" data-switch-event="mouseenter mouseout">
 				This won't work until you initialize the plugin.
 			</div>
 		</div>

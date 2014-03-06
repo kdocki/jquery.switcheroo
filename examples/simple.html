@@ -2,7 +2,7 @@
 <head>
 
 <script src="/bower_components/jquery/dist/jquery.js"></script>
-<script src="/jquery.toggler.js"></script>
+<script src="/jquery.switcheroo.js"></script>
 
 <style type="text/css">
 	#example1 {
@@ -23,36 +23,36 @@
 	<div style="float:left;">
 		<div>
 			<h4>Links (toggles when clicked)</h4>
-			<a href="#" data-toggler="#example1">Toggle Active</a> |
-			<a href="#" data-toggler-off="#example1">Turn Active Off</a> |
-			<a href="#" data-toggler-on="#example1">Turn Active On</a>
+			<a href="#" data-switch="#example1">Toggle Active</a> |
+			<a href="#" data-switch-off="#example1">Turn Active Off</a> |
+			<a href="#" data-switch-on="#example1">Turn Active On</a>
 		</div>
 
 		<div>
 			<h4>Text input (toggles when focused)</h4>
-			Name: <input type="text" data-toggler="#example1" name="lastname">
+			Name: <input type="text" data-switch="#example1" name="lastname">
 		</div>
 
 		<div>
 			<h4>Radio (toggles when checked)</h4>
-			<input  data-toggler-on="#example1" type="radio" name="sex" value="male">Male
+			<input  data-switch-on="#example1" type="radio" name="sex" value="male">Male
 
-			<input  data-toggler-off="#example1" type="radio" name="sex" value="female">Female
+			<input  data-switch-off="#example1" type="radio" name="sex" value="female">Female
 		</div>
 
 		<div>
 			<h4>Checkboxes (toggles when checked)</h4>
-			<input  data-toggler="#example1" type="checkbox" name="vehicle" value="Bike">I have a bike<br>
+			<input  data-switch="#example1" type="checkbox" name="vehicle" value="Bike">I have a bike<br>
 		</div>
 
 		<div>
 			<h4>Textarea (toggles on focus)</h4>
-			<textarea data-toggler="#example1"></textarea><br>
+			<textarea data-switch="#example1"></textarea><br>
 		</div>
 
 		<div>
 			<h4>Custom selectbox (toggles when values change)</h4>
-			<select data-toggler="#example1">
+			<select data-switch="#example1">
 				<option value="saab">Saab</option>
 				<option value="volvo">Volvo</option>
 				<option value="mercedes">Mercedes</option>

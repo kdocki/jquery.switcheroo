@@ -1,7 +1,7 @@
 <html>
 <head>
 	<script src="/bower_components/jquery/dist/jquery.js"></script>
-	<script src="/jquery.toggler.js"></script>
+	<script src="/jquery.switcheroo.js"></script>
 	<style type="text/css">
 		.frame {
 			height: 100px;
@@ -71,19 +71,19 @@
 	<h3>Select a photo</h3>
 
 	<div class="frame-section">
-		<div class="frame one transition" data-toggler-off=".about,.frame" data-toggler-on=".frame.one,.about.one,.frame-section">
+		<div class="frame one transition" data-switch-off=".about,.frame" data-switch-on=".frame.one,.about.one,.frame-section">
 			<span class="valign"></span>
 			<img class="photo" src="http://placekitten.com/g/200/300">
 		</div>
-		<div class="frame two transition" data-toggler-off=".about,.frame" data-toggler-on=".frame.two,.about.two,.frame-section">
+		<div class="frame two transition" data-switch-off=".about,.frame" data-switch-on=".frame.two,.about.two,.frame-section">
 			<span class="valign"></span>
 			<img class="photo" src="http://placekitten.com/g/200/350">
 		</div>
-		<div class="frame three transition" data-toggler-off=".about,.frame" data-toggler-on=".frame.three,.about.three,.frame-section">
+		<div class="frame three transition" data-switch-off=".about,.frame" data-switch-on=".frame.three,.about.three,.frame-section">
 			<span class="valign"></span>
 			<img class="photo" src="http://placekitten.com/g/200/140">
 		</div>
-		<div class="frame four transition" data-toggler-off=".about,.frame" data-toggler-on=".frame.four,.about.four,.frame-section">
+		<div class="frame four transition" data-switch-off=".about,.frame" data-switch-on=".frame.four,.about.four,.frame-section">
 			<span class="valign"></span>
 			<img class="photo" src="http://placekitten.com/g/200/200">
 		</div>
@@ -106,7 +106,7 @@
 		</div>
 		<div class="about fade-in transition three">
 			<h4>Change <code>eventOrdering</code> for different event pattern</h4>
-			<p>You can always change this in the defaults though by changing <code>$.fn.toggler.defaults.eventOrdering</code></p>
+			<p>You can always change this in the defaults though by changing <code>$.fn.switcheroo.defaults.eventOrdering</code></p>
 		</div>
 		<div class="about fade-in transition four">
 			<h4>I leave you with, a lovely poem</h4>

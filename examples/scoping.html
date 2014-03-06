@@ -2,7 +2,7 @@
 <head>
 
 <script src="/bower_components/jquery/dist/jquery.js"></script>
-<script src="/jquery.toggler.js"></script>
+<script src="/jquery.switcheroo.js"></script>
 
 <style type="text/css">
 	.container {
@@ -27,11 +27,11 @@
 </head>
 
 <body>
-	<p style="width: 400px;">Anything that is scoped will trigger the active/inactive toggle on mouseenter/ouseout. Notice that all these are using the .box class but they don't interfere with each other because they are correctly scoped to their data-toggler-init parents.</p>
+	<p style="width: 400px;">Anything that is scoped will trigger the active/inactive toggle on mouseenter/ouseout. Notice that all these are using the .box class but they don't interfere with each other because they are correctly scoped to their data-switch-init parents.</p>
 
-	<div class="bottom-margin" data-toggler-init>
+	<div class="bottom-margin" data-switch-init>
 		<div class="container">
-			<div data-toggler=".box" data-toggler-event="mouseenter mouseout">
+			<div data-switch=".box" data-switch-event="mouseenter mouseout">
 			This will work because we have scopped.
 			</div>
 		</div>
@@ -45,7 +45,7 @@
 
 	<div class="bottom-margin" >
 		<div class="container">
-			<div data-toggler=".box" data-toggler-event="mouseenter mouseout">
+			<div data-switch=".box" data-switch-event="mouseenter mouseout">
 				This won't ever trigger a toggle.
 			</div>
 		</div>
@@ -57,9 +57,9 @@
 		</div>
 	</div>
 
-	<div class="bottom-margin" data-toggler-init>
+	<div class="bottom-margin" data-switch-init>
 		<div class="container">
-			<div data-toggler=".box" data-toggler-event="mouseenter mouseout">
+			<div data-switch=".box" data-switch-event="mouseenter mouseout">
 			This will work because we have scopped.
 			</div>
 		</div>
@@ -71,16 +71,16 @@
 		</div>
 	</div>
 
-	<div class="bottom-margin" data-toggler-init=".subcontainer">
+	<div class="bottom-margin" data-switch-init=".subcontainer">
 		<div class="container">
-			<div data-toggler=".box" data-toggler-event="mouseenter mouseout">
+			<div data-switch=".box" data-switch-event="mouseenter mouseout">
 				This is not scoped because it is not in the .subcontainer class
 			</div>
 		</div>
 
 		<div class="subcontainer">
 			<div class="container">
-				<div data-toggler=".box" data-toggler-event="mouseenter mouseout">
+				<div data-switch=".box" data-switch-event="mouseenter mouseout">
 					<b>But this is.</b>
 				</div>
 			</div>

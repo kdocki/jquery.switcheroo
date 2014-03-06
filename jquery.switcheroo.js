@@ -5,13 +5,6 @@
 (function($)
 {
 	/**
-	 * Keep up with the elements we ahve registered because we
-	 * don't want to re-register them again.
-	 *
-	 */
-	var registered = [];
-
-	/**
 	 * Handle different event types
 	 *
 	 */
@@ -32,7 +25,7 @@
 		var toggleClasses = getToggleClasses(element, selected, settings);
 
 		// we treat select's a little differently because
-		// they can have options which have toggler-on/off
+		// they can have options which have switcheroo-on/off
 		if (elementType != "select")
 		{
 			return handler(selected, toggleClasses, event, settings);
@@ -347,7 +340,7 @@
 		}
 
 		// check if parent has been registered, we should not do nested
-		// data-toggler-inits, but we should childproof just in case
+		// data-switch-init, but we should childproof just in case
 		var parentInitializer = $(element).closest('[' + settings.selectors.registered + ']');
 
 		if (parentInitializer.length > 0)
@@ -365,22 +358,22 @@
 
 
 		$(element).settings = settings;
-		$(element).setHandler = $.fn.toggler.setHandler;
+		$(element).setHandler = $.fn.switcheroo.setHandler;
 		$(element).attr(settings.selectors.registered, true);
 
 		settings.bootstrap($(element), settings);
 	}
 
 	/**
-	 * Register a toggler on an element. This will
+	 * Register a switcheroo on an element. This will
 	 * use this as the base selector and search out and
 	 * find all children elements (even dynamically created
 	 * ones) for the toggleSelector, offSelector and onSelector
 	 *
 	 */
-	$.fn.toggler = function(options)
+	$.fn.switcheroo = function(options)
 	{
-		var settings = $.extend( {}, $.fn.toggler.defaults, options );
+		var settings = $.extend( {}, $.fn.switcheroo.defaults, options );
 
 		return this.each(function (index, element)
 		{
@@ -395,7 +388,7 @@
 	 * stuff, like toggle, toggleOn and toggleOff.
 	 *
 	 */
-	$.fn.toggler.setHandler = function(name, handler)
+	$.fn.switcheroo.setHandler = function(name, handler)
 	{
 		if (typeof this.settings !== 'undefined' && typeof this.settings.handlers !== 'undefined')
 		{
@@ -403,7 +396,7 @@
 		}
 		else
 		{
-			$.fn.toggler.defaults.handlers[name] = handler;
+			$.fn.switcheroo.defaults.handlers[name] = handler;
 		}
 	};
 
@@ -411,13 +404,14 @@
 	 * Defaults for this plugin
 	 *
 	 */
-	$.fn.toggler.defaults =
+	$.fn.switcheroo.defaults =
 	{
 		animateDelay	: 1000,
 		toggleOffClass	: "",
 		toggleOnClass 	: "active",
 		eventOrdering 	: ['toggle', 'toggleOff', 'toggleOn', 'animate'],
 		eventTypes		: 'click dblclick change focusin focusout mousedown mouseup mouseover mousemove mouseenter mouseout dragstart drag dragenter dragleave dragover drop dragend keypress keyup',
+
 		eventType 		: {
 			text 		: "focusin focusout",
 			textarea 	: "focusin focusout",
@@ -429,16 +423,16 @@
 		},
 
 		selectors			: {
-			animate 		: "data-toggler-animate",
-			toggle 			: "data-toggler",
-			toggleOn 		: "data-toggler-on",
-			toggleOff 		: "data-toggler-off",
-			toggleOffClass 	: "data-toggler-off-class",
-			toggleOnClass 	: "data-toggler-on-class",
-			eventType 		: "data-toggler-event",
-			handler 		: "data-toggler-handler",
-			init 			: "data-toggler-init",
-			registered 		: "data-toggler-registered"
+			animate 		: "data-switch-animate",
+			toggle 			: "data-switch",
+			toggleOn 		: "data-switch-on",
+			toggleOff 		: "data-switch-off",
+			toggleOffClass 	: "data-switch-off-class",
+			toggleOnClass 	: "data-switch-on-class",
+			eventType 		: "data-switch-event",
+			handler 		: "data-switch-handler",
+			init 			: "data-switch-init",
+			registered 		: "data-switch-registered"
 		},
 
 		bootstrap 	: function(element, settings) { },
@@ -480,11 +474,11 @@
 	 */
 	$(function()
 	{
-		var selector = $.fn.toggler.defaults.selectors.init;
+		var selector = $.fn.switcheroo.defaults.selectors.init;
 
 		if ($('['+selector+']').length == 0)
 		{
-			return $('body').toggler();
+			return $('body').switcheroo();
 		}
 
 		$('['+selector+']').each(function(index, initializer)
@@ -500,10 +494,10 @@
 
 			if (trim(element) != '')
 			{
-				return $(element).toggler();
+				return $(element).switcheroo();
 			}
 
-			return initializer.toggler();
+			return initializer.switcheroo();
 		});
 	});
 

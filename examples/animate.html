@@ -1,7 +1,7 @@
 <html>
 <head>
 	<script src="/bower_components/jquery/dist/jquery.js"></script>
-	<script src="/jquery.toggler.js"></script>
+	<script src="/jquery.switcheroo.js"></script>
 	<link type="text/css" rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.0.0/animate.min.css">
 	<style>
 		.animated.forever {
@@ -12,100 +12,100 @@
 </head>
 <body class="animated fadeInDown">
 	<center>
-		<select data-toggler="h1" style="margin: 50px 0px;">
+		<select data-switch="h1" style="margin: 50px 0px;">
 			<optgroup label="Attention Seekers">
-				<option data-toggler-on-class="bounce">bounce</option>
-				<option data-toggler-on-class="flash">flash</option>
-				<option data-toggler-on-class="pulse">pulse</option>
-				<option data-toggler-on-class="rubberBand">rubberBand</option>
-				<option data-toggler-on-class="shake">shake</option>
-				<option data-toggler-on-class="swing">swing</option>
-				<option data-toggler-on-class="tada">tada</option>
-				<option data-toggler-on-class="wobble">wobble</option>
+				<option data-switch-on-class="bounce">bounce</option>
+				<option data-switch-on-class="flash">flash</option>
+				<option data-switch-on-class="pulse">pulse</option>
+				<option data-switch-on-class="rubberBand">rubberBand</option>
+				<option data-switch-on-class="shake">shake</option>
+				<option data-switch-on-class="swing">swing</option>
+				<option data-switch-on-class="tada">tada</option>
+				<option data-switch-on-class="wobble">wobble</option>
 			</optgroup>
 
 			<optgroup label="Bouncing Entrances">
-				<option data-toggler-on-class="bounceIn">bounceIn</option>
-				<option data-toggler-on-class="bounceInDown">bounceInDown</option>
-				<option data-toggler-on-class="bounceInLeft">bounceInLeft</option>
-				<option data-toggler-on-class="bounceInRight">bounceInRight</option>
-				<option data-toggler-on-class="bounceInUp">bounceInUp</option>
+				<option data-switch-on-class="bounceIn">bounceIn</option>
+				<option data-switch-on-class="bounceInDown">bounceInDown</option>
+				<option data-switch-on-class="bounceInLeft">bounceInLeft</option>
+				<option data-switch-on-class="bounceInRight">bounceInRight</option>
+				<option data-switch-on-class="bounceInUp">bounceInUp</option>
 			</optgroup>
 
 			<optgroup label="Bouncing Exits">
-				<option data-toggler-on-class="bounceOut">bounceOut</option>
-				<option data-toggler-on-class="bounceOutDown">bounceOutDown</option>
-				<option data-toggler-on-class="bounceOutLeft">bounceOutLeft</option>
-				<option data-toggler-on-class="bounceOutRight">bounceOutRight</option>
-				<option data-toggler-on-class="bounceOutUp">bounceOutUp</option>
+				<option data-switch-on-class="bounceOut">bounceOut</option>
+				<option data-switch-on-class="bounceOutDown">bounceOutDown</option>
+				<option data-switch-on-class="bounceOutLeft">bounceOutLeft</option>
+				<option data-switch-on-class="bounceOutRight">bounceOutRight</option>
+				<option data-switch-on-class="bounceOutUp">bounceOutUp</option>
 			</optgroup>
 
 			<optgroup label="Fading Entrances">
-				<option data-toggler-on-class="fadeIn">fadeIn</option>
-				<option data-toggler-on-class="fadeInDown">fadeInDown</option>
-				<option data-toggler-on-class="fadeInDownBig">fadeInDownBig</option>
-				<option data-toggler-on-class="fadeInLeft">fadeInLeft</option>
-				<option data-toggler-on-class="fadeInLeftBig">fadeInLeftBig</option>
-				<option data-toggler-on-class="fadeInRight">fadeInRight</option>
-				<option data-toggler-on-class="fadeInRightBig">fadeInRightBig</option>
-				<option data-toggler-on-class="fadeInUp">fadeInUp</option>
-				<option data-toggler-on-class="fadeInUpBig">fadeInUpBig</option>
+				<option data-switch-on-class="fadeIn">fadeIn</option>
+				<option data-switch-on-class="fadeInDown">fadeInDown</option>
+				<option data-switch-on-class="fadeInDownBig">fadeInDownBig</option>
+				<option data-switch-on-class="fadeInLeft">fadeInLeft</option>
+				<option data-switch-on-class="fadeInLeftBig">fadeInLeftBig</option>
+				<option data-switch-on-class="fadeInRight">fadeInRight</option>
+				<option data-switch-on-class="fadeInRightBig">fadeInRightBig</option>
+				<option data-switch-on-class="fadeInUp">fadeInUp</option>
+				<option data-switch-on-class="fadeInUpBig">fadeInUpBig</option>
 			</optgroup>
 
 			<optgroup label="Fading Exits">
-				<option data-toggler-on-class="fadeOut">fadeOut</option>
-				<option data-toggler-on-class="fadeOutDown">fadeOutDown</option>
-				<option data-toggler-on-class="fadeOutDownBig">fadeOutDownBig</option>
-				<option data-toggler-on-class="fadeOutLeft">fadeOutLeft</option>
-				<option data-toggler-on-class="fadeOutLeftBig">fadeOutLeftBig</option>
-				<option data-toggler-on-class="fadeOutRight">fadeOutRight</option>
-				<option data-toggler-on-class="fadeOutRightBig">fadeOutRightBig</option>
-				<option data-toggler-on-class="fadeOutUp">fadeOutUp</option>
-				<option data-toggler-on-class="fadeOutUpBig">fadeOutUpBig</option>
+				<option data-switch-on-class="fadeOut">fadeOut</option>
+				<option data-switch-on-class="fadeOutDown">fadeOutDown</option>
+				<option data-switch-on-class="fadeOutDownBig">fadeOutDownBig</option>
+				<option data-switch-on-class="fadeOutLeft">fadeOutLeft</option>
+				<option data-switch-on-class="fadeOutLeftBig">fadeOutLeftBig</option>
+				<option data-switch-on-class="fadeOutRight">fadeOutRight</option>
+				<option data-switch-on-class="fadeOutRightBig">fadeOutRightBig</option>
+				<option data-switch-on-class="fadeOutUp">fadeOutUp</option>
+				<option data-switch-on-class="fadeOutUpBig">fadeOutUpBig</option>
 			</optgroup>
 
 			<optgroup label="Flippers">
-				<option data-toggler-on-class="flip">flip</option>
-				<option data-toggler-on-class="flipInX">flipInX</option>
-				<option data-toggler-on-class="flipInY">flipInY</option>
-				<option data-toggler-on-class="flipOutX">flipOutX</option>
-				<option data-toggler-on-class="flipOutY">flipOutY</option>
+				<option data-switch-on-class="flip">flip</option>
+				<option data-switch-on-class="flipInX">flipInX</option>
+				<option data-switch-on-class="flipInY">flipInY</option>
+				<option data-switch-on-class="flipOutX">flipOutX</option>
+				<option data-switch-on-class="flipOutY">flipOutY</option>
 			</optgroup>
 
 			<optgroup label="Lightspeed">
-				<option data-toggler-on-class="lightSpeedIn">lightSpeedIn</option>
-				<option data-toggler-on-class="lightSpeedOut">lightSpeedOut</option>
+				<option data-switch-on-class="lightSpeedIn">lightSpeedIn</option>
+				<option data-switch-on-class="lightSpeedOut">lightSpeedOut</option>
 			</optgroup>
 
 			<optgroup label="Rotating Entrances">
-				<option data-toggler-on-class="rotateIn">rotateIn</option>
-				<option data-toggler-on-class="rotateInDownLeft">rotateInDownLeft</option>
-				<option data-toggler-on-class="rotateInDownRight">rotateInDownRight</option>
-				<option data-toggler-on-class="rotateInUpLeft">rotateInUpLeft</option>
-				<option data-toggler-on-class="rotateInUpRight">rotateInUpRight</option>
+				<option data-switch-on-class="rotateIn">rotateIn</option>
+				<option data-switch-on-class="rotateInDownLeft">rotateInDownLeft</option>
+				<option data-switch-on-class="rotateInDownRight">rotateInDownRight</option>
+				<option data-switch-on-class="rotateInUpLeft">rotateInUpLeft</option>
+				<option data-switch-on-class="rotateInUpRight">rotateInUpRight</option>
 			</optgroup>
 
 			<optgroup label="Rotating Exits">
-				<option data-toggler-on-class="rotateOut">rotateOut</option>
-				<option data-toggler-on-class="rotateOutDownLeft">rotateOutDownLeft</option>
-				<option data-toggler-on-class="rotateOutDownRight">rotateOutDownRight</option>
-				<option data-toggler-on-class="rotateOutUpLeft">rotateOutUpLeft</option>
-				<option data-toggler-on-class="rotateOutUpRight">rotateOutUpRight</option>
+				<option data-switch-on-class="rotateOut">rotateOut</option>
+				<option data-switch-on-class="rotateOutDownLeft">rotateOutDownLeft</option>
+				<option data-switch-on-class="rotateOutDownRight">rotateOutDownRight</option>
+				<option data-switch-on-class="rotateOutUpLeft">rotateOutUpLeft</option>
+				<option data-switch-on-class="rotateOutUpRight">rotateOutUpRight</option>
 			</optgroup>
 
 			<optgroup label="Sliders">
-				<option data-toggler-on-class="slideInDown">slideInDown</option>
-				<option data-toggler-on-class="slideInLeft">slideInLeft</option>
-				<option data-toggler-on-class="slideInRight">slideInRight</option>
-				<option data-toggler-on-class="slideOutLeft">slideOutLeft</option>
-				<option data-toggler-on-class="slideOutRight">slideOutRight</option>
-				<option data-toggler-on-class="slideOutUp">slideOutUp</option>
+				<option data-switch-on-class="slideInDown">slideInDown</option>
+				<option data-switch-on-class="slideInLeft">slideInLeft</option>
+				<option data-switch-on-class="slideInRight">slideInRight</option>
+				<option data-switch-on-class="slideOutLeft">slideOutLeft</option>
+				<option data-switch-on-class="slideOutRight">slideOutRight</option>
+				<option data-switch-on-class="slideOutUp">slideOutUp</option>
 			</optgroup>
 
 			<optgroup label="Specials">
-				<option data-toggler-on-class="hinge">hinge</option>
-				<option data-toggler-on-class="rollIn">rollIn</option>
-				<option data-toggler-on-class="rollOut">rollOut</option>
+				<option data-switch-on-class="hinge">hinge</option>
+				<option data-switch-on-class="rollIn">rollIn</option>
+				<option data-switch-on-class="rollOut">rollOut</option>
 			</optgroup>
 		</select>
 
