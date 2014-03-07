@@ -47,7 +47,7 @@ This is a pretty simple example. You can get pretty advanced with this plugin. F
 ## Options
 
 ```js
-
+	put in options here once we get a stable version going
 ```
 
 ## See more examples?
