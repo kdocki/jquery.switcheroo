@@ -36,7 +36,7 @@ It is up to you to determine what happens in active/non-active states via css ru
  #foobar.active {
   display: inherit;
  }
- 
+
  #foobar {
   display: none;
  }
@@ -52,10 +52,23 @@ This is a pretty simple example. You can get pretty advanced with this plugin. F
 
 ## See more examples?
 
-Clone/download this repository and run 
+Clone/download this repository and run
 
 ```
   bower install
 ```
 
 then load up `examples/simple.html` or a different page to view some examples.
+
+## TODO
+
+- Add in support for multiple classes in array to toggle in steps (maybe data-switch-next)
+- Add classes.original and classes.previous and classes.next
+- Add data-switch-to handler
+
+Then we need to
+
+- Fix selects-custom-classes and switch-classes examples
+- Change how data-switch-animate works in animate.html once we get classes.original working
+
+
