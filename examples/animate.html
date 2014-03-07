@@ -15,16 +15,9 @@
 			toggle.selected.each(function(index, item)
 			{
 				var element = $(item);
-				var previous = element.attr('data-switch-previous-state');
-
-				if (typeof previous === 'undefined')
-				{
-					previous = element.attr('class');
-					element.attr('data-switch-previous-state', previous);
-				}
 
 				element.removeClass();
-				element.addClass(previous);
+				element.addClass(toggle.classes.original(element));
 				element.addClass(toggle.classes.all);
 			});
 		});

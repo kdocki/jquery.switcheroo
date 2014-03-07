@@ -500,19 +500,28 @@
 
 	/**
 	 * Get the original classname on an element
+	 * as a function because we can have multiple
+	 * elements with different original class names.
 	 *
 	 */
-	function getOriginalClassName(element, settings)
+	function getOriginalClassName(selected, settings)
 	{
-		var original = element.attr(settings.selectors.originalClass);
-
-		if (typeof original === 'undefined')
+		selected.each(function(index, item)
 		{
-			original = element.attr('class');
-			element.attr(settings.selectors.originalClass, original);
-		}
+			var element = $(item);
+			var original = element.attr(settings.selectors.originalClass);
 
-		return original;
+			if (typeof original === 'undefined')
+			{
+				original = element.attr('class');
+				element.attr(settings.selectors.originalClass, original);
+			}
+		});
+
+		return function(item)
+		{
+			return $(item).attr(settings.selectors.originalClass);
+		};
 	}
 
 	/**
