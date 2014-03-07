@@ -15,9 +15,33 @@
 	{
 		var settings = $.extend( {}, $.fn.switcheroo.defaults, options );
 
-		return this.each(function (index, element)
+		return this.each(function (index, selected)
 		{
-			register(element, settings);
+			var element = $(selected);
+			var isRegistered = element.attr(settings.selectors.registered);
+			var parentInitializer = element.closest('[' + settings.selector('registered') + ']');
+
+			if (isRegistered === "true" || isRegistered === true)
+			{
+				return;
+			}
+
+			if (parentInitializer.length > 0)
+			{
+				console.warn('not registering', element, 'because it has registered parent', parentInitializer);
+				return;
+			}
+
+			element.attr(settings.selectors.registered, true);
+			element.settings = settings;
+			element.setHandler = $.fn.switcheroo.setHandler;
+
+			// register events in a specific order
+			for (var index in settings.eventOrdering)
+			{
+				var name = settings.eventOrdering[index];
+				element.setHandler(name, settings.handlers[name]);
+			}
 		});
 	};
 
@@ -30,14 +54,23 @@
 	 */
 	$.fn.switcheroo.setHandler = function(name, handler)
 	{
-		if (typeof this.settings !== 'undefined' && typeof this.settings.handlers !== 'undefined')
+		var register = typeof this.settings !== 'undefined'
+		var settings = (register) ? this.settings : $.fn.switcheroo.defaults;
+
+		if (typeof settings.selectors[name] === 'undefined')
 		{
-			this.settings.handlers[name] = handler;
+			settings.selectors[name] = settings.selectors.toggle + '-' + name;
 		}
-		else
+
+		settings.handlers[name] = handler;
+
+		if (!register)
 		{
-			$.fn.switcheroo.defaults.handlers[name] = handler;
+			settings.eventOrdering.push(name);
+			return;
 		}
+
+		this.on(settings.eventTypes, '[' + settings.selector(name) + ']', handleEvent(name, settings));
 	};
 
 	/**
@@ -46,12 +79,19 @@
 	 */
 	$.fn.switcheroo.defaults =
 	{
-		animateDelay	: 1000,
-		bootstrap 		: function(element, settings) { },
-		eventOrdering 	: ['toggle', 'toggleOff', 'toggleOn'],
-		eventTypes		: 'click dblclick change focusin focusout mousedown mouseup mouseover mousemove mouseenter mouseout dragstart drag dragenter dragleave dragover drop dragend keypress keyup',
+		// order of event calls
+		eventOrdering 	: ['toggle', 'off', 'on', 'to'],
+
+		// this is the default DOM element we will bind to if initialization is not overriden
 		initDefault		: 'body',
+
+		// these classes are toggled back and forth
 		toggleClasses	: ['', 'active'],
+
+		// all event types we will listen for globally on registered DOM element
+		eventTypes		: 'click dblclick change focusin focusout mousedown mouseup mouseover mousemove mouseenter mouseout dragstart drag dragenter dragleave dragover drop dragend keypress keyup',
+
+		// default event types for specific element types
 		eventType 		: {
 			text 		: "focusin focusout",
 			textarea 	: "focusin focusout",
@@ -61,64 +101,56 @@
 			option 		: "change",
 			others 		: "click"
 		},
-		selectors			: {
-			toggle 			: "data-switch",
-			toggleOn 		: "data-switch-on",
-			toggleOff 		: "data-switch-off",
-			toggleTo 		: "data-switch-to",
-			toggleAnimate 	: "data-switch-animate",
+
+		// this allows us to map specific events with specific handlers
+		eventOverrides	: {
+			'focusin'	: 'on',
+			'focusout'	: 'off',
+			'mouseenter': 'on',
+			'mouseout'	: 'off'
+		},
+
+		// this is how we know which elements to select from the DOM
+		selectors		: {
+			toggle			: "data-switch",
 			toggleClass 	: "data-switch-class",
-			toggleStep		: "data-switch-step",
 			eventType 		: "data-switch-event",
-			handler 		: "data-switch-handler",
 			init 			: "data-switch-init",
 			registered 		: "data-switch-registered"
 		},
+
+		// handlers are how we handle our toggle event
 		handlers: {
-			animate: function(selected, toggle, event, settings)
-			{
-				settings.handlers.toggle(selected, toggle, event, settings);
+			toggle: function(toggle)
+		 	{
+		 		toggle.selected.toggleClass(toggle.classes.active);
+		 		toggle.selected.toggleClass(toggle.classes.inactive);
+		 	},
 
-				setTimeout(function() { settings.handlers.toggle(selected, { on: toggle.off, off: toggle.on }, event, settings); }, settings.animateDelay);
+			on: function(toggle)
+			{
+				toggle.selected.removeClass(toggle.classes.first);
+				toggle.selected.addClass(toggle.classes.last);
 			},
 
-			toggle: function(selected, toggle, event, settings)
+			off: function(toggle)
 			{
-				selected.toggleClass(toggle.off);
-
-				selected.toggleClass(toggle.on);
+				toggle.selected.removeClass(toggle.classes.last);
+				toggle.selected.addClass(toggle.classes.first);
 			},
 
-			toggleOn: function(selected, toggle, event, settings)
+			to : function(toggle)
 			{
-				if (toggle.on != toggle.off)
-				{
-					selected.removeClass(toggle.off);
-				}
-
-				selected.addClass(toggle.on);
-			},
-
-			toggleOff: function(selected, toggle, event, settings)
-			{
-				if (toggle.on != toggle.off)
-				{
-					selected.removeClass(toggle.off);
-				}
-
-				selected.addClass(toggle.on);
-			},
-
-			toggleTo : function(selected, toggle, event, settings)
-			{
-				if (toggle.on != toggle.off)
-				{
-					selected.removeClass(toggle.off);
-				}
-
-				selected.addClass(toggle.on);
+				toggle.selected.removeClass(toggle.classes.all);
+				toggle.selected.addClass(toggle.classes.switchto);
 			}
-		}
+		},
+
+		// shortcut method to get the selector name
+		selector 		: getSelector,
+
+		// allows us to override the handler for specific cases, i.e. checkbox/textarea
+		handlerOverride	: getEventHandlerName
 	};
 
 	/**
@@ -156,20 +188,166 @@
 	});
 
 	/**
+	 * Trim a string's whitespace. We use this because IE8 doesn't
+	 * have the String.prototype.trim fucntion. If the string is an
+	 * array then we will loop through and trim each element.
+	 *
+	 */
+	function trim(string)
+	{
+		if ($.isArray(string))
+		{
+			for (var index in string)
+			{
+				string[index] = trim(string[index]);
+			}
+
+			return string;
+		}
+
+		return string.replace(/^\s+|\s+$/g, '');
+	}
+
+	/**
+	 * Make sure that the event type matches what
+	 * we should trigger on the current element
+	 *
+	 */
+	function isMatchingEventType(event, settings)
+	{
+		var eventType = getEventType($(event.currentTarget), settings);
+
+		return trim(eventType.split(' ')).indexOf(event.type) != -1;
+	}
+
+	/**
+	 * Returns a closure for handling the event. This
+	 * takes into account the settings as well. Filters
+	 * out only event types that should fire the handler
+	 * for this element.
+	 *
+	 * For example, we don't want the mouseover
+	 * event triggering our handler when only the
+	 * click event should.
+	 */
+	function handleEvent(eventType, settings)
+	{
+		return function(event)
+		{
+			if (isMatchingEventType(event, settings))
+			{
+				onEvent(event, eventType, settings);
+			}
+		}
+	}
+
+	/**
 	 * Handle different event types that come through. If we've made
 	 * it this far then we should process the event because it
 	 * was a matching event type.
 	 *
 	 */
-	function onEvent(event, handlerDefaultName, settings)
+	function onEvent(event, handlerName, settings)
 	{
-		var toggle = {};
+		var toggle = {
+			element: $(event.currentTarget),
+			event: event,
+			settings: settings,
+			handlerName: handlerName
+		};
 
-		toggle.selected = getElementToChange(event, handlerDefaultName, settings);
-		toggle.handler = getEventHandler(event, handlerDefaultName, settings);
-		toggle.classes = getToggleClasses(event, handlerDefaultName, settings);
+		toggle.selected = getElementToChange(toggle);
+		toggle.handler = getEventHandler(toggle);
+		toggle.classes = getToggleClasses(toggle);
 
-		return toggle.handler(toggle.selected, toggle.classes, event, settings);
+		// we handle select boxes a little differently
+		if (getElementType(toggle.element) == 'select')
+		{
+			return onSelectEvent(toggle);
+		}
+
+		return toggle.handler(toggle);
+	}
+
+	/**
+	 * We handle the select box event here. We do this because
+	 * we can set overrides on each <option> inside of the select
+	 * and those don't actually get triggered by events so we have
+	 * to handle the event triggering ourselves. This allows us
+	 * to have multiple handlers on an option element if we need
+	 * to override the main select's handlers.
+	 *
+	 */
+	function onSelectEvent(toggle)
+	{
+		var select = toggle.element;
+		var option = select.find(':selected');
+
+		if (option === 'undefined')
+		{
+			return toggle.handler(toggle);
+		}
+
+		// override the [data-switch-class] on the option level
+		if (hasToggleClasses(option, toggle.handlerName, toggle.settings))
+		{
+			toggle.element = option;
+			toggle.classes = getToggleClasses(toggle);
+			toggle.element = select;
+		}
+
+		var handlers = getOptionHandlers(toggle, option);
+
+		if (handlers.length == 0)
+		{
+			return toggle.handler(toggle);
+		}
+
+		// run through all the handlers we setup
+		for (var index in handlers)
+		{
+			var current = handlers[index];
+			current.handler(current);
+		}
+	}
+
+	/**
+	 * We can have multiple handlers on a selectbox
+	 * so let's use those. Anytime we override any handler
+	 * on an option we don't execute the parent handlers on
+	 * the selectbox. This keeps the events from overlapping.
+	 *
+	 * This is by design as I think it will keep it simpler.
+	 *
+	 */
+	function getOptionHandlers(toggle, option)
+	{
+		var handlers = [];
+		var settings = toggle.settings;
+
+		for (var index in settings.eventOrdering)
+		{
+			var handlerName = settings.eventOrdering[index];
+			var selector = settings.selector(handlerName);
+
+			if (typeof option.attr(selector) !== 'undefined')
+			{
+				var optionToggle = $.extend({}, toggle);
+				optionToggle.handlerName = handlerName;
+ 				optionToggle.handler = getEventHandler(optionToggle);
+
+ 				// see if selected element should be overriden
+ 				var elementToChange = getElementToChange(optionToggle);
+ 				if (elementToChange.length > 0)
+ 				{
+	 				optionToggle.selected = elementToChange;
+ 				}
+
+				handlers.push(optionToggle);
+			}
+		}
+
+		return handlers;
 	}
 
 	/**
@@ -181,16 +359,17 @@
 	 * element.
 	 *
 	 */
-	function getElementToChange(event, handlerDefaultName, settings)
+	function getElementToChange(toggle)
 	{
-		var element = $(event.currentTarget);
-		var selector = element.attr(settings.selectors[handlerDefaultName]);
+		var settings = toggle.settings;
+		var element = toggle.element;
+		var selector = element.attr(settings.selectors[toggle.handlerName]);
 		var elementType = getElementType(element);
 
 		// overrides for select option
 		if (elementType == 'select')
 		{
-			var optionSelector = element.find(':selected').attr(settings.selectors[handlerDefaultName]);
+			var optionSelector = element.find(':selected').attr(settings.selectors[toggle.handlerName]);
 
 			if (typeof optionSelector !== 'undefined' && optionSelector != '')
 			{
@@ -210,58 +389,175 @@
 
 	/**
 	 * Returns the handler we should use for this toggle event
-	 * instance. This can be overridden in several ways so we
-	 * use a function to help us with that. It can be overridden
-	 * because of the event type or there is a [data-switch-handler]
-	 * attribute on the element.
+	 * instance. It can be overridden because of the event type.
 	 *
 	 */
-	function getEventHandler(event, handlerDefaultName, settings)
+	function getEventHandler(toggle)
 	{
-		var handlerName = getEventHandlerName(event, handlerDefaultName, settings);
+		var settings = toggle.settings;
+		var handlerName = toggle.handlerName;
+		var event = toggle.event;
+
+		handlerName = settings.handlerOverride(event, handlerName);
 
 		if (typeof settings.handlers[handlerName] === 'undefined')
 		{
-			console.warn('Could not find handler for ' + handlerName, $(event.currentTarget));
+			console.warn('Could not find handler for ' + handlerName, toggle.element, settings);
 		}
 
 		return settings.handlers[handlerName];
 	}
 
 	/**
-	 * We get the event handler name we should be working with
-	 * because this can be overridden at any point. This is done
-	 * by the [data-switch-handler] or by the event.type.
+	 * Get the classes by categories. Some categories are
+	 *
+	 * 	1. all 			- all classes in our toggleClasses array
+	 * 	2. active 		- the classes that are active
+	 * 	3. inactive		- the classes that are inactive
+	 * 	4. toggleTo 	- the class we can change to (if overrride)
+	 * 	5. first		- the first class in array
+	 * 	6. last			- the last class in array
+	 * 	7. previous 	- the class before current class
+	 * 	8. next			- the class after current class
+	 * 	9. list 		- (has active, inactive, all arrays)
+	 *
+	 * This also takes into consideration an overrides made
+	 * on the element [data-switch-class] and select options
+	 *
+	 * This allows users to set their own classes for an element
+	 * if they don't want to just toggle between '' and 'active'.
 	 *
 	 */
-	function getEventHandlerName(event, handlerDefaultName, settings)
+	function getToggleClasses(toggle)
 	{
-		var element = $(event.currentTarget);
-		var elementType = getElementType(element);
-		var handlerName = element.attr(settings.selectors.handler);
+		var classes = {};
+		var element = $(toggle.element);
+		var settings = toggle.settings;
+		var handlerName = toggle.handlerName;
+		var toggleClasses = getToggleClassesList(element, handlerName, settings);
 
-		if (elementType == "select")
-		{
-			var optionHandlerName = element.find(":selected").attr(settings.selectors.handler);
+		var query = getToggleClassesQuery(toggle.selected, toggleClasses);
 
-			// if (typeof optionHandlerName !== 'undefined' && optionHandlerName)
-		}
+		// here are a bunch of categories we can use in our
+		// toggle handler later if we want...
+		classes.all = toggleClasses.join(' ');
+		classes.active = query.active.join(' ');
+		classes.inactive = query.inactive.join(' ');
+		classes.to = (typeof settings.selectors.to !== 'undefined') ? element.attr(settings.selectors.to) : false;
+		classes.first = toggleClasses[0];
+		classes.last = toggleClasses[toggleClasses.length - 1];
 
-		if (typeof handlerName !== 'undefined')
-		{
-			return handlerName;
-		}
+		// this only really works when you have no duplicate
+		// classes in your toggleClasses array...
+		classes.previous = query.previous;
+		classes.next = query.next;
 
-		return handlerDefaultName;
+		// in case we want to use the original arrays
+		// in our handler later... who knows... *shrugs*
+		classes.list = {
+			active: query.active,
+			inactive: query.inactive,
+			all: toggleClasses
+		};
+
+		return classes;
 	}
 
 	/**
-	 * Get the classes we should turn on and off.
+	 * Returns a query about all the classes that are active/inactive
+	 * as well as the previous and next. We do this all together for
+	 * performance so we don't have to loop 4 different times over the
+	 * same array.
 	 *
 	 */
-	function getToggleClasses(event, handlerDefaultName, settings)
+	function getToggleClassesQuery(element, toggleClasses)
 	{
-		return {on: 'active', off: ''};
+		var query = { active: [], inactive: [], previous: '', next: '' };
+
+		for (var index in toggleClasses)
+		{
+			var className = toggleClasses[index];
+
+			if (hasFullClassName(element, className))
+			{
+				query.active.push(className);
+				//query.prevous = getPreviousToggleClass(element, className, toggleClasses);
+				//query.next = getNextToggleClass(element, className, toggleClasses);
+			}
+			else
+			{
+				query.inactive.push(className);
+			}
+		}
+
+		return query;
+	}
+
+	/**
+	 * This is here because say you have the $element
+	 * 		<div class="animated"></div>
+	 * then
+	 * 		$element.hasClass('animated cool') // true
+	 *
+	 * So we will go through each class and ensure the entire
+	 * class is part of the element not just some of it.
+	 *
+	 */
+	function hasFullClassName(element, className)
+	{
+		var classNames = className.split(' ');
+
+		for (var index in classNames)
+		{
+			if (!element.hasClass(classNames[index]))
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Here we get the array listing of classes that we can toggle
+	 * through.
+	 *
+	 */
+	function getToggleClassesList(element, handlerName, settings)
+	{
+		var override = hasToggleClasses(element, handlerName, settings);
+
+		if (override === false)
+		{
+			return settings.toggleClasses;
+		}
+
+		if (override.substr(0, 1) == '[' && override.substr(override.length - 1, 1) == ']')
+		{
+			override = trim(override.substr(1, override.length - 2).split(','));
+		}
+		else
+		{
+			override = ['', override];
+		}
+
+		return override;
+	}
+
+	/**
+	 * See if this element has [data-switch-class] override.
+	 *
+	 */
+	function hasToggleClasses(element, handlerName, settings)
+	{
+		var override = element.attr(settings.selectors.toggleClass);
+
+		if (typeof override === 'undefined' || trim(override) === '')
+		{
+			return false;
+		}
+
+		return trim(override);
 	}
 
 	/**
@@ -308,97 +604,44 @@
 	}
 
 	/**
-	 * Make sure that the event type matches what
-	 * we should trigger on the current element
+	 * Get the selector for this key
 	 *
 	 */
-	function isMatchingEventType(event, settings)
+	function getSelector(key)
 	{
-		var eventType = getEventType($(event.currentTarget), settings);
-
-		return trim(eventType.split(' ')).indexOf(event.type) != -1;
+		return this.selectors[key];
 	}
 
 	/**
-	 * Trim a string's whitespace. We use this because IE8 doesn't
-	 * have the String.prototype.trim fucntion. If the string is an
-	 * array then we will loop through and trim each element.
+	 * We can override the handler here for specific elements.
+	 *
+	 * We loop through eventOverrides to see if there are any
+	 * that match this event.type and then we also check if this
+	 * element is a checkbox then we want to toggle on/off to
+	 * match the is(:checked) property.
 	 *
 	 */
-	function trim(string)
+	function getEventHandlerName(event, handlerName)
 	{
-		if ($.isArray(string))
+		for (var index in this.eventOverrides)
 		{
-			for (var index in string)
+			var eventOverride = this.eventOverrides[index];
+			if (event.type == index)
 			{
-				string[index] = trim(string[index]);
-			}
-
-			return string;
-		}
-
-		return string.replace(/^\s+|\s+$/g, '');
-	}
-
-	/**
-	 * Returns a closure for handling the event. This
-	 * takes into account the settings as well.
-	 */
-	function handleEvent(settings, handler, eventType)
-	{
-		return function(event)
-		{
-			// we don't want to trigger this on mouseover
-			// or other events when we just want click event
-			// or another specific event
-			if (isMatchingEventType(event, settings))
-			{
-				handler(event, eventType, settings);
+				return eventOverride;
 			}
 		}
-	}
 
-	/**
-	 * Register an element with the given settings. This
-	 * will search through all the children of the element
-	 * and use the selectors for all given events.
-	 *
-	 * We also want to ensure we don't register listeners
-	 * on the same element twice as this would cause lots
-	 * of head aches.
-	 *
-	 */
-	function register(element, settings)
-	{
-		var isAlreadyRegistered = $(element).attr(settings.selectors.registered);
+		var element = $(event.currentTarget);
+		var elementType = getElementType(element);
 
-		if (isAlreadyRegistered === "true" || isAlreadyRegistered === true)
+		// override checkboxes to see if they are selected
+		if (handlerName == 'toggle' && elementType == 'checkbox')
 		{
-			return;
+			return element.is(':checked') ? 'on' : 'off';
 		}
 
-		// check if parent has been registered, we should not do nested
-		// data-switch-init, but we should childproof just in case
-		var parentInitializer = $(element).closest('[' + settings.selectors.registered + ']');
-
-		if (parentInitializer.length > 0)
-		{
-			console.warn('not registering', element, 'because it has registered parent', parentInitializer);
-			return;
-		}
-
-		// register events in a specific order
-		for (var index in settings.eventOrdering)
-		{
-			var eventType = settings.eventOrdering[index];
-			$(element).on(settings.eventTypes, '['+settings.selectors[eventType]+']', handleEvent(settings, onEvent, eventType));
-		}
-
-		$(element).settings = settings;
-		$(element).setHandler = $.fn.switcheroo.setHandler;
-		$(element).attr(settings.selectors.registered, true);
-
-		settings.bootstrap($(element), settings);
+		return handlerName;
 	}
 
 })(jQuery);

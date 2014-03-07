@@ -18,8 +18,9 @@
 		});
 	};
 
-	$.fn.switcheroo.setHandler('shake', function(selected, toggle, event, settings) {
-		selected.shake(4, 10, 300);
+	$.fn.switcheroo.setHandler('shake', function(toggle)
+	{
+		toggle.selected.shake(4, 10, 300);
 	});
 </script>
 <style type="text/css">
@@ -56,13 +57,15 @@
 	<div class="container">
 		<div>
 			<h4>Custom selectbox (toggles when values change)</h4>
-			<select data-switch="#box1" data-switch-class="[yellow, green, blue]">
-				<option value="1" data-switch-on="#box2">turn on box2</option>
-				<option value="2" data-switch=".cool">toggle box1 &amp; box2</option>
-				<option value="3" data-switch-off data-switch-on="#box2">turn off box1 &amp; turn on box2</option>
-				<option value="4" data-switch-off="#box1,#box2">turn off box1 &amp; box2</option>
-				<option value="4" data-switch-handler="shake">shake box1</option>
-				<option data-switch data-switch-to="green" data-switch-class="[yellow, green, blue]">Switch to green</option>
+			<select data-switch="#box1">
+				<option data-switch>toggle box1</option>
+				<option data-switch-on="#box2">turn on box2</option>
+				<option data-switch=".cool">toggle box1 &amp; box2</option>
+				<option data-switch-off data-switch-on="#box2">turn off box1 &amp; turn on box2</option>
+				<option data-switch-off="#box1,#box2">turn off box1 &amp; box2</option>
+				<option data-switch-shake>shake box1</option>
+				<option>toggle box1 (default)</option>
+				<option data-switch=".not-a-real-selector">Do nothing...</option>
 			</select>
 		</div>
 	</div>
