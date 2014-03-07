@@ -114,6 +114,7 @@
 		selectors		: {
 			toggle			: "data-switch",
 			toggleClass 	: "data-switch-class",
+			originalClass 	: "data-switch-original-class",
 			eventType 		: "data-switch-event",
 			init 			: "data-switch-init",
 			registered 		: "data-switch-registered"
@@ -417,9 +418,10 @@
 	 * 	4. toggleTo 	- the class we can change to (if overrride)
 	 * 	5. first		- the first class in array
 	 * 	6. last			- the last class in array
-	 * 	7. previous 	- the class before current class
-	 * 	8. next			- the class after current class
+	 * 	7. prev(step=1)	- the class before current class
+	 * 	8. next(step=1)	- the class after current class
 	 * 	9. list 		- (has active, inactive, all arrays)
+	 * 10. original		- the classes before we started touching things
 	 *
 	 * This also takes into consideration an overrides made
 	 * on the element [data-switch-class] and select options
@@ -436,7 +438,7 @@
 		var handlerName = toggle.handlerName;
 		var toggleClasses = getToggleClassesList(element, handlerName, settings);
 
-		var query = getToggleClassesQuery(toggle.selected, toggleClasses);
+		var query = getToggleClassesQuery(toggle.selected, toggleClasses, toggle.settings);
 
 		// here are a bunch of categories we can use in our
 		// toggle handler later if we want...
@@ -451,6 +453,7 @@
 		// classes in your toggleClasses array...
 		classes.previous = query.previous;
 		classes.next = query.next;
+		classes.original = query.original;
 
 		// in case we want to use the original arrays
 		// in our handler later... who knows... *shrugs*
@@ -470,9 +473,13 @@
 	 * same array.
 	 *
 	 */
-	function getToggleClassesQuery(element, toggleClasses)
+	function getToggleClassesQuery(element, toggleClasses, settings)
 	{
-		var query = { active: [], inactive: [], previous: '', next: '' };
+		var query = { original: '', active: [], inactive: [], previous: '', next: '' };
+
+		query.original = getOriginalClassName(element, settings);
+		query.prevous = getPreviousToggleClass(element, className, toggleClasses, settings);
+		query.next = getNextToggleClass(element, className, toggleClasses, settings);
 
 		for (var index in toggleClasses)
 		{
@@ -481,8 +488,6 @@
 			if (hasFullClassName(element, className))
 			{
 				query.active.push(className);
-				//query.prevous = getPreviousToggleClass(element, className, toggleClasses);
-				//query.next = getNextToggleClass(element, className, toggleClasses);
 			}
 			else
 			{
@@ -491,6 +496,52 @@
 		}
 
 		return query;
+	}
+
+	/**
+	 * Get the original classname on an element
+	 *
+	 */
+	function getOriginalClassName(element, settings)
+	{
+		var original = element.attr(settings.selectors.originalClass);
+
+		if (typeof original === 'undefined')
+		{
+			original = element.attr('class');
+			element.attr(settings.selectors.originalClass, original);
+		}
+
+		return original;
+	}
+
+	/**
+	 * Returns the previous class name function so handlers
+	 * can get the previous class.
+	 *
+	 */
+	function getPreviousToggleClass(element, className, toggleClasses, settings)
+	{
+		return function(step)
+		{
+			step = (typeof step !== 'undefined') ? step : 1;
+
+			return '';
+		};
+	}
+
+	/**
+	 * Returns the next class name function so handlers
+	 * can get the next class in the loop.
+	 *
+	 */
+	function getNextToggleClass(element, className, toggleClasses, settings)
+	{
+		return function(step)
+		{
+			step = (typeof step !== 'undefined') ? step : 1;
+			return '';
+		};
 	}
 
 	/**
