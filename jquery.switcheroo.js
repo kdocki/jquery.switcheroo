@@ -2,6 +2,7 @@
  * @author  Kelt <kelt@dockins.org>
  * @license  MIT
  */
+var global;
 (function($)
 {
 	/**
@@ -77,7 +78,7 @@
 	 * Defaults for this plugin
 	 *
 	 */
-	$.fn.switcheroo.defaults =
+global=	$.fn.switcheroo.defaults =
 	{
 		// order of event calls
 		eventOrdering 	: ['revert', 'toggle', 'off', 'on', 'prev', 'next'],
@@ -256,6 +257,7 @@
 			handlerName: handlerName
 		};
 
+
 		toggle.selected = getElementToChange(toggle);
 		toggle.handler = getEventHandler(toggle);
 		toggle.classes = getToggleClasses(toggle);
@@ -405,7 +407,7 @@
 		var event = toggle.event;
 
 		handlerName = settings.handlerOverride(event, handlerName);
-
+		
 		if (typeof settings.handlers[handlerName] === 'undefined')
 		{
 			console.warn('Could not find handler for ' + handlerName, toggle.element, settings);
@@ -791,7 +793,7 @@
 		for (var index in this.eventOverrides)
 		{
 			var eventOverride = this.eventOverrides[index];
-			if (event.type == index)
+			if (handlerName == 'toggle' && event.type == index)
 			{
 				return eventOverride;
 			}

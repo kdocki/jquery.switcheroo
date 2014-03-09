@@ -1,0 +1,25 @@
+<html>
+<head>
+
+<script src="../bower_components/jquery/dist/jquery.js"></script>
+<script src="../jquery.switcheroo.js"></script>
+<script>
+	jQuery(function()
+	{
+		jQuery.fn.switcheroo.setHandler('notify', function(toggle)
+		{
+		    if (toggle.event.type == 'focusout')
+		    {
+		        alert('Send an ajax call now with value ' + toggle.element.val());
+		    }
+		});
+	});
+</script>
+
+</head>
+<body>
+	<div style="float:left;">
+		<input type="text" data-switch-notify placeholder="How old are you?">
+	</div>
+</body>
+</html>
