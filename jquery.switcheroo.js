@@ -80,7 +80,7 @@
 	$.fn.switcheroo.defaults =
 	{
 		// order of event calls
-		eventOrdering 	: ['toggle', 'off', 'on', 'to'],
+		eventOrdering 	: ['revert', 'toggle', 'off', 'on', 'prev', 'next'],
 
 		// this is the default DOM element we will bind to if initialization is not overriden
 		initDefault		: 'body',
@@ -115,35 +115,55 @@
 			toggle			: "data-switch",
 			toggleClass 	: "data-switch-class",
 			originalClass 	: "data-switch-original-class",
+			to 				: "data-switch-to",
 			eventType 		: "data-switch-event",
 			init 			: "data-switch-init",
-			registered 		: "data-switch-registered"
+			registered 		: "data-switch-registered",
+			noloop			: "data-switch-no-loop"
 		},
 
 		// handlers are how we handle our toggle event
 		handlers: {
 			toggle: function(toggle)
 		 	{
-		 		toggle.selected.toggleClass(toggle.classes.active);
-		 		toggle.selected.toggleClass(toggle.classes.inactive);
+		 		if (toggle.classes.to)
+		 		{
+			 		return toggle.selected.toggleClass(toggle.classes.to);
+		 		}
+
+		 		toggle.selected.toggleClass(toggle.classes.last);
+		 		toggle.selected.toggleClass(toggle.classes.first, !toggle.selected.hasClass(toggle.classes.last));
 		 	},
 
 			on: function(toggle)
 			{
-				toggle.selected.removeClass(toggle.classes.first);
-				toggle.selected.addClass(toggle.classes.last);
+				var to = toggle.classes.to ? toggle.classes.to : toggle.classes.last;
+
+				toggle.selected.removeClass(toggle.classes.all);
+				toggle.selected.addClass(to);
 			},
 
 			off: function(toggle)
 			{
-				toggle.selected.removeClass(toggle.classes.last);
+				var to = toggle.classes.to ? toggle.classes.to : toggle.classes.all;
+				
+				toggle.selected.removeClass(to)
 				toggle.selected.addClass(toggle.classes.first);
 			},
 
-			to : function(toggle)
+			prev: function(toggle)
 			{
-				toggle.selected.removeClass(toggle.classes.all);
-				toggle.selected.addClass(toggle.classes.switchto);
+				toggle.classes.prev(toggle.selected);
+			},
+
+			next: function(toggle)
+			{
+				toggle.classes.next(toggle.selected);
+			},
+
+			revert: function(toggle)
+			{
+				toggle.classes.revert(toggle.selected);
 			}
 		},
 
@@ -187,27 +207,6 @@
 			return initializer.switcheroo();
 		});
 	});
-
-	/**
-	 * Trim a string's whitespace. We use this because IE8 doesn't
-	 * have the String.prototype.trim fucntion. If the string is an
-	 * array then we will loop through and trim each element.
-	 *
-	 */
-	function trim(string)
-	{
-		if ($.isArray(string))
-		{
-			for (var index in string)
-			{
-				string[index] = trim(string[index]);
-			}
-
-			return string;
-		}
-
-		return string.replace(/^\s+|\s+$/g, '');
-	}
 
 	/**
 	 * Make sure that the event type matches what
@@ -295,6 +294,12 @@
 			toggle.element = option;
 			toggle.classes = getToggleClasses(toggle);
 			toggle.element = select;
+		}
+
+		// override the [data-switch-to] on the option level
+		if (option.attr(toggle.settings.selectors.to) !== 'undefined')
+		{
+			toggle.classes.to = option.attr(toggle.settings.selectors.to);
 		}
 
 		var handlers = getOptionHandlers(toggle, option);
@@ -438,22 +443,34 @@
 		var handlerName = toggle.handlerName;
 		var toggleClasses = getToggleClassesList(element, handlerName, settings);
 
-		var query = getToggleClassesQuery(toggle.selected, toggleClasses, toggle.settings);
+		var query = getToggleClassesQuery(toggle.selected, toggleClasses, settings, element);
 
 		// here are a bunch of categories we can use in our
 		// toggle handler later if we want...
 		classes.all = toggleClasses.join(' ');
 		classes.active = query.active.join(' ');
 		classes.inactive = query.inactive.join(' ');
+
 		classes.to = (typeof settings.selectors.to !== 'undefined') ? element.attr(settings.selectors.to) : false;
 		classes.first = toggleClasses[0];
 		classes.last = toggleClasses[toggleClasses.length - 1];
 
 		// this only really works when you have no duplicate
 		// classes in your toggleClasses array...
-		classes.previous = query.previous;
+		classes.prev = query.prev;
 		classes.next = query.next;
 		classes.original = query.original;
+
+		// reverts element(s) to original state
+		classes.revert = function (selected)
+		{
+			$(selected).each(function(index, item)
+			{
+				var element = $(item);
+				element.removeClass();
+				element.addClass(classes.original(item));
+			});
+		};
 
 		// in case we want to use the original arrays
 		// in our handler later... who knows... *shrugs*
@@ -473,19 +490,19 @@
 	 * same array.
 	 *
 	 */
-	function getToggleClassesQuery(element, toggleClasses, settings)
+	function getToggleClassesQuery(selected, toggleClasses, settings, element)
 	{
 		var query = { original: '', active: [], inactive: [], previous: '', next: '' };
 
-		query.original = getOriginalClassName(element, settings);
-		query.prevous = getPreviousToggleClass(element, className, toggleClasses, settings);
-		query.next = getNextToggleClass(element, className, toggleClasses, settings);
+		query.original = getOriginalClassNameFunction(selected, settings);
+		query.prev = getPreviousToggleClassFunction(element, className, toggleClasses, settings);
+		query.next = getNextToggleClassFunction(element, className, toggleClasses, settings);
 
 		for (var index in toggleClasses)
 		{
 			var className = toggleClasses[index];
 
-			if (hasFullClassName(element, className))
+			if (hasFullClassName(selected, className))
 			{
 				query.active.push(className);
 			}
@@ -504,7 +521,7 @@
 	 * elements with different original class names.
 	 *
 	 */
-	function getOriginalClassName(selected, settings)
+	function getOriginalClassNameFunction(selected, settings)
 	{
 		selected.each(function(index, item)
 		{
@@ -527,15 +544,33 @@
 	/**
 	 * Returns the previous class name function so handlers
 	 * can get the previous class.
-	 *
+	Function *
 	 */
-	function getPreviousToggleClass(element, className, toggleClasses, settings)
+	function getPreviousToggleClassFunction(element, className, toggleClasses, settings)
 	{
-		return function(step)
+		return function(items, step)
 		{
 			step = (typeof step !== 'undefined') ? step : 1;
 
-			return '';
+			$(items).each(function(index, item)
+			{
+				var selected = $(item);
+				var current = getCurrentToggleClassIndex(selected, toggleClasses);
+				var previous = (current == -1) ? 0 - step : current - step;
+				previous = mod(previous, toggleClasses.length);
+
+				if (typeof element.attr(settings.selectors.noloop) !== 'undefined' && current <= 0)
+				{
+					previous = 0;
+				}
+
+				if (current >= 0)
+				{
+					selected.removeClass(toggleClasses[current]);
+				}
+
+				selected.addClass(toggleClasses[previous]);
+			});
 		};
 	}
 
@@ -544,13 +579,49 @@
 	 * can get the next class in the loop.
 	 *
 	 */
-	function getNextToggleClass(element, className, toggleClasses, settings)
+	function getNextToggleClassFunction(element, className, toggleClasses, settings)
 	{
-		return function(step)
+		return function(items, step)
 		{
 			step = (typeof step !== 'undefined') ? step : 1;
-			return '';
+
+			$(items).each(function(index, item)
+			{
+				var selected = $(item);
+				var current = getCurrentToggleClassIndex(selected, toggleClasses);
+				var next = mod(current + step, toggleClasses.length);
+
+				if (typeof element.attr(settings.selectors.noloop) !== 'undefined' && current == toggleClasses.length - 1)
+				{
+					next = toggleClasses.length - 1;
+				}
+
+				if (current >= 0)
+				{
+					selected.removeClass(toggleClasses[current]);
+				}
+
+				selected.addClass(toggleClasses[next]);				
+			});
 		};
+	}
+
+	/**
+	 * Returns the current index of our toggle class
+	 * for the given element. Needs to be a singular element.
+	 * 
+	 */
+	function getCurrentToggleClassIndex(element, toggleClasses)
+	{
+		for (var index in toggleClasses)
+		{
+			if (hasFullClassName(element, toggleClasses[index]))
+			{
+				return parseInt(index);
+			}
+		}
+
+		return -1;
 	}
 
 	/**
@@ -563,7 +634,7 @@
 	 * class is part of the element not just some of it.
 	 *
 	 */
-	function hasFullClassName(element, className)
+	function hasFullClassName(element, className, allClasses)
 	{
 		var classNames = className.split(' ');
 
@@ -576,6 +647,40 @@
 		}
 
 		return true;
+	}
+
+	/**
+	 * Javascript modulus function returns negative numbers
+	 * for negative moduli, and even though this is correct
+	 * we want to constrict the range from 0 to n - 1, so 
+	 * we need to use this function instead of just %.
+	 * 
+	 */
+	function mod(x, n)
+	{
+		var r = x % n;
+		return (r < 0) ? r += n : r;
+	}
+
+	/**
+	 * Trim a string's whitespace. We use this because IE8 doesn't
+	 * have the String.prototype.trim fucntion. If the string is an
+	 * array then we will loop through and trim each element.
+	 *
+	 */
+	function trim(string)
+	{
+		if ($.isArray(string))
+		{
+			for (var index in string)
+			{
+				string[index] = trim(string[index]);
+			}
+
+			return string;
+		}
+
+		return string.replace(/^\s+|\s+$/g, '');
 	}
 
 	/**

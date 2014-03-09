@@ -10,7 +10,7 @@
 		top: 20px;
 		left: 50px;
 		display: inline;
-		border: 1px solid #333;
+		border: 3px solid #333;
 		padding: 20px;
 	}
 
@@ -26,41 +26,51 @@
 		background-color: blue;
 	}
 
-	#example1.active {
-		border: 5px solid #abc;
+	#example1.dashed {
+		border-style: dashed;
+	}
+
+	#example1.solid {
+		border: 3px solid #333;
+	}
+
+	#example1.red-border {
+		border-color: red;
+	}
+
+	#example1.purple-border {
+		border-color: purple;
 	}
 </style>
+<script>
+	$.fn.switcheroo.defaults.toggleClasses = ['yellow', 'green', 'blue'];
+</script>
 </head>
 <body>
 	<div style="float:left;">
 		<div>
 			<h4>Links (toggles when clicked)</h4>
-			<a href="#" data-switch="#example1" data-switch-class="[yellow, green, blue]">Toggle Colors</a> |
+			<a href="#" data-switch-prev="#example1">Previous Color</a> |
 
-			<a href="#" data-switch="#example1" data-switch-step="-1" data-switch-class="[yellow, green, blue]">Toggle Colors Backwards</a>
+			<a href="#" data-switch-next="#example1">Next Color</a> |
 
-			<br>
-			<br>
-
-			<a href="#" data-switch-off="#example1" data-switch-class="[yellow, green, blue]">Turn Color Yellow</a> |
-
-			<a href="#" data-switch="#example1" data-switch-to="green" data-switch-class="[yellow, green, blue]">Turn Color Green</a> |
-
-			<a href="#" data-switch-on="#example1" data-switch-class="[yellow, green, blue]">Turn Color Blue</a>
+			<a href="#" data-switch="#example1" data-switch-class="[solid red-border,dashed purple-border]">Toggle Border</a>
 
 			<br>
 			<br>
 
-			<a href="#" data-switch-on="#example1" data-switch-class="[yellow, green, blue]" data-switch-step>Toggle Colors Forwards, Stop At Blue</a> |
+			<a href="#" data-switch-off="#example1">Turn Color Yellow</a> |
 
-			<a href="#" data-switch-off="#example1" data-switch-class="[yellow, green, blue]" data-switch-step>Toggle Colors Backwards, Stop At Yellow</a>
+			<a href="#" data-switch-on="#example1" data-switch-to="green">Turn Color Green</a> |
+
+			<a href="#" data-switch-on="#example1">Turn Color Blue</a>
 
 			<br>
 			<br>
 
-			<a href="#" data-switch="#example1">Toggle Active</a> |
-			<a href="#" data-switch-off="#example1">Turn Active Off</a> |
-			<a href="#" data-switch-on="#example1">Turn Active On</a>
+			<a href="#" data-switch-prev="#example1" data-switch-no-loop>Toggle Colors Backwards, Stop At Yellow</a> |
+
+			<a href="#" data-switch-next="#example1" data-switch-no-loop>Toggle Colors Forwards, Stop At Blue</a>
 		</div>
 	</div>
 	<div>

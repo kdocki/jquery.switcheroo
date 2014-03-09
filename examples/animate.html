@@ -2,30 +2,17 @@
 <head>
 	<script src="/bower_components/jquery/dist/jquery.js"></script>
 	<script src="/jquery.switcheroo.js"></script>
-	<link type="text/css" rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.0.0/animate.min.css">
+	<link type="text/css" rel="stylesheet" href="animate.css">
 	<style>
 		.animated.forever {
 		    -webkit-animation-duration: 3s;
 		    -webkit-animation-iteration-count: infinite;
 		}
 	</style>
-	<script>
-		$.fn.switcheroo.setHandler('animate', function(toggle)
-		{
-			toggle.selected.each(function(index, item)
-			{
-				var element = $(item);
-
-				element.removeClass();
-				element.addClass(toggle.classes.original(element));
-				element.addClass(toggle.classes.all);
-			});
-		});
-	</script>
 </head>
 <body class="animated fadeInDown">
 	<center>
-		<select data-switch-animate="h1" style="margin: 50px 0px;">
+		<select data-switch-on="h1" data-switch-revert="h1" style="margin: 50px 0px;">
 			<optgroup label="Attention Seekers">
 				<option data-switch-class="bounce">bounce</option>
 				<option data-switch-class="flash">flash</option>

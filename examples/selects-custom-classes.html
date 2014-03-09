@@ -9,8 +9,12 @@
 		display: inline-block;
 	}
 
+	.cool {
+		border: 3px solid #333;
+	}
+
 	.cool.green {
-		background-color: green;
+		background-color: green !important;
 	}
 
 	.cool.yellow {
@@ -19,6 +23,16 @@
 
 	.cool.blue {
 		background-color: blue;
+	}
+
+	.active {
+		border-style: dashed;
+		border-color: orange;
+	}
+
+	.inactive {
+		border-style: dashed;
+		border-color: red;
 	}
 </style>
 </head>
@@ -32,6 +46,7 @@
 				<option value="3" data-switch-off data-switch-on="#box2">box1 yellow &amp; box2 blue</option>
 				<option value="4" data-switch-off="#box1,#box2">box1 &amp; box2 yellow</option>
 				<option data-switch-to="green">box1 green</option>
+				<option data-switch-class="[inactive,active]">toggle box1 inactive/active</option>
 				<option data-switch=".do-nothing">do nothing...</option>
 			</select>
 		</div>
