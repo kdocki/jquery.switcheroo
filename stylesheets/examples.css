@@ -8,7 +8,15 @@ h2 {
 	font-weight: bold;
 }
 
-.line {
+.bolder {
+	font-size: 1.25em;
+	font-weight: bolder;
+}
+
+.bottom-line {
+	padding-top: 20px;
+	width: 100%;
+	height: 1px;
 	border-bottom: 1px solid #ddd;
 }
 
@@ -20,7 +28,8 @@ h2 {
 }
 
 .example.active {
-	background-color: yellow;
+	background-color: #F33 !important;
+	color: white;
 }
 
 .frame {
@@ -83,4 +92,40 @@ img {
 	-o-transition: all 0.1s ease;
 	-ms-transition: all 0.1s ease;
 	transition: all 0.1s ease;
+}
+
+.example.yellow {
+	background-color: yellow;
+}
+
+.example.green {
+	background-color: green;
+	color: white;
+}
+
+.example.blue {
+	background-color: blue;
+	color: white;
+}
+
+.example.dashed {
+	border-style: dashed;
+}
+
+.example.solid {
+	border: 3px solid #333;
+}
+
+.example.red-border {
+	border-color: red;
+}
+
+.example.purple-border {
+	border-color: purple;
+}
+
+.button {
+	-webkit-box-sizing: initial;
+	-moz-box-sizing: initial;
+	box-sizing: initial;
 }

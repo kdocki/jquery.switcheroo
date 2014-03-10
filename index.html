@@ -34,210 +34,230 @@
 
     <div id="content-wrapper">
       <div class="inner clearfix">
-        <section id="main-content">
+        <section id="main-content" class="row">
 
-          <div class="row">
-            <div class="col-sm-8" style="border-right: 1px solid #ddd;">
+          <h2 name="simple-links">Links <small>(toggles when clicked)</small></h2>
 
-              <h2 name="simple-links">Links <small>(toggles when clicked)</small></h2>
+          <a href="#simple-links" data-switch="#example1">Toggle Active</a> |
+          <a href="#simple-links" data-switch-off="#example1">Turn Active Off</a> |
+          <a href="#simple-links" data-switch-on="#example1">Turn Active On</a>
 
-              <a href="#simple-links" data-switch="#example1">Toggle Active</a> |
-              <a href="#simple-links" data-switch-off="#example1">Turn Active Off</a> |
-              <a href="#simple-links" data-switch-on="#example1">Turn Active On</a>
+          <div class="bottom-line"></div>
 
-              <hr class="line">
+          <h2>Text input <small>(toggles when focused)</small></h2>
 
-              <h2>Text input <small>(toggles when focused)</small></h2>
-
-              <input type="text" data-switch="#example1" name="lastname">
+          <input type="text" data-switch="#example1" name="lastname">
 
 
-              <h2>Textarea <small>(toggles on focus)</small></h2>
+          <h2>Textarea <small>(toggles on focus)</small></h2>
 
-              <textarea data-switch="#example1"></textarea>
+          <textarea data-switch="#example1"></textarea>
 
-              <hr class="line">
+          <div class="bottom-line"></div>
 
-              <h2>Radio <small>(Male = off, Female = on)</small></h2>
+          <h2>Radio <small>(Male = off, Female = on)</small></h2>
 
-              <input  data-switch-on="#example1" type="radio" name="radio_name" value="on i guess"> on
-              <input  data-switch-off="#example1" type="radio" name="radio_name" value="off i guess"> off
+          <input  data-switch-on="#example1" type="radio" name="radio_name" value="on i guess"> on
+          <input  data-switch-off="#example1" type="radio" name="radio_name" value="off i guess"> off
 
 
-              <h2>Checkboxes <small>(on when checked - off when unchecked)</small></h2>
+          <h2>Checkboxes <small>(on when checked - off when unchecked)</small></h2>
 
-              <input  data-switch="#example1" type="checkbox" name="vehicle" value="Bike">I have a bike
+          <input  data-switch="#example1" type="checkbox" name="vehicle" value="Bike">I have a bike
 
-              <h2>Select box <small>(toggles when values change)</small></h2>
+          <h2>Select box <small>(toggles when values change)</small></h2>
 
-              <select data-switch="#example1">
-                <option value="saab">Saab</option>
-                <option value="volvo">Volvo</option>
-                <option value="mercedes">Mercedes</option>
-                <option value="audi">Audi</option>
-              </select>
+          <select data-switch="#example1">
+            <option value="saab">Saab</option>
+            <option value="volvo">Volvo</option>
+            <option value="mercedes">Mercedes</option>
+            <option value="audi">Audi</option>
+          </select>
 
-              <hr class="line">
+          <div class="bottom-line"></div>
 
-              <h2>Animations <small>(with animate.css)</small></h2>
+          <h2>Animations <small>(with animate.css - also <span class="bolder">reverts</span> classes)</small></h2>
 
-              <select data-switch-on=".animated" data-switch-revert=".animated">
-                <optgroup label="Attention Seekers">
-                  <option data-switch-class="bounce">bounce</option>
-                  <option data-switch-class="flash">flash</option>
-                  <option data-switch-class="pulse">pulse</option>
-                  <option data-switch-class="shake">shake</option>
-                  <option data-switch-class="swing">swing</option>
-                  <option data-switch-class="tada">tada</option>
-                  <option data-switch-class="wobble">wobble</option>
-                </optgroup>
+          <select data-switch-on=".animated" data-switch-revert=".animated">
+            <optgroup label="Attention Seekers">
+              <option data-switch-class="bounce">bounce</option>
+              <option data-switch-class="flash">flash</option>
+              <option data-switch-class="pulse">pulse</option>
+              <option data-switch-class="shake">shake</option>
+              <option data-switch-class="swing">swing</option>
+              <option data-switch-class="tada">tada</option>
+              <option data-switch-class="wobble">wobble</option>
+            </optgroup>
 
-                <optgroup label="Bouncing Entrances">
-                  <option data-switch-class="bounceIn">bounceIn</option>
-                  <option data-switch-class="bounceInDown">bounceInDown</option>
-                  <option data-switch-class="bounceInLeft">bounceInLeft</option>
-                  <option data-switch-class="bounceInRight">bounceInRight</option>
-                  <option data-switch-class="bounceInUp">bounceInUp</option>
-                </optgroup>
+            <optgroup label="Bouncing Entrances">
+              <option data-switch-class="bounceIn">bounceIn</option>
+              <option data-switch-class="bounceInDown">bounceInDown</option>
+              <option data-switch-class="bounceInLeft">bounceInLeft</option>
+              <option data-switch-class="bounceInRight">bounceInRight</option>
+              <option data-switch-class="bounceInUp">bounceInUp</option>
+            </optgroup>
 
-                <optgroup label="Bouncing Exits">
-                  <option data-switch-class="bounceOut">bounceOut</option>
-                  <option data-switch-class="bounceOutDown">bounceOutDown</option>
-                  <option data-switch-class="bounceOutLeft">bounceOutLeft</option>
-                  <option data-switch-class="bounceOutRight">bounceOutRight</option>
-                  <option data-switch-class="bounceOutUp">bounceOutUp</option>
-                </optgroup>
+            <optgroup label="Bouncing Exits">
+              <option data-switch-class="bounceOut">bounceOut</option>
+              <option data-switch-class="bounceOutDown">bounceOutDown</option>
+              <option data-switch-class="bounceOutLeft">bounceOutLeft</option>
+              <option data-switch-class="bounceOutRight">bounceOutRight</option>
+              <option data-switch-class="bounceOutUp">bounceOutUp</option>
+            </optgroup>
 
-                <optgroup label="Fading Entrances">
-                  <option data-switch-class="fadeIn">fadeIn</option>
-                  <option data-switch-class="fadeInDown">fadeInDown</option>
-                  <option data-switch-class="fadeInDownBig">fadeInDownBig</option>
-                  <option data-switch-class="fadeInLeft">fadeInLeft</option>
-                  <option data-switch-class="fadeInLeftBig">fadeInLeftBig</option>
-                  <option data-switch-class="fadeInRight">fadeInRight</option>
-                  <option data-switch-class="fadeInRightBig">fadeInRightBig</option>
-                  <option data-switch-class="fadeInUp">fadeInUp</option>
-                  <option data-switch-class="fadeInUpBig">fadeInUpBig</option>
-                </optgroup>
+            <optgroup label="Fading Entrances">
+              <option data-switch-class="fadeIn">fadeIn</option>
+              <option data-switch-class="fadeInDown">fadeInDown</option>
+              <option data-switch-class="fadeInDownBig">fadeInDownBig</option>
+              <option data-switch-class="fadeInLeft">fadeInLeft</option>
+              <option data-switch-class="fadeInLeftBig">fadeInLeftBig</option>
+              <option data-switch-class="fadeInRight">fadeInRight</option>
+              <option data-switch-class="fadeInRightBig">fadeInRightBig</option>
+              <option data-switch-class="fadeInUp">fadeInUp</option>
+              <option data-switch-class="fadeInUpBig">fadeInUpBig</option>
+            </optgroup>
 
-                <optgroup label="Fading Exits">
-                  <option data-switch-class="fadeOut">fadeOut</option>
-                  <option data-switch-class="fadeOutDown">fadeOutDown</option>
-                  <option data-switch-class="fadeOutDownBig">fadeOutDownBig</option>
-                  <option data-switch-class="fadeOutLeft">fadeOutLeft</option>
-                  <option data-switch-class="fadeOutLeftBig">fadeOutLeftBig</option>
-                  <option data-switch-class="fadeOutRight">fadeOutRight</option>
-                  <option data-switch-class="fadeOutRightBig">fadeOutRightBig</option>
-                  <option data-switch-class="fadeOutUp">fadeOutUp</option>
-                  <option data-switch-class="fadeOutUpBig">fadeOutUpBig</option>
-                </optgroup>
+            <optgroup label="Fading Exits">
+              <option data-switch-class="fadeOut">fadeOut</option>
+              <option data-switch-class="fadeOutDown">fadeOutDown</option>
+              <option data-switch-class="fadeOutDownBig">fadeOutDownBig</option>
+              <option data-switch-class="fadeOutLeft">fadeOutLeft</option>
+              <option data-switch-class="fadeOutLeftBig">fadeOutLeftBig</option>
+              <option data-switch-class="fadeOutRight">fadeOutRight</option>
+              <option data-switch-class="fadeOutRightBig">fadeOutRightBig</option>
+              <option data-switch-class="fadeOutUp">fadeOutUp</option>
+              <option data-switch-class="fadeOutUpBig">fadeOutUpBig</option>
+            </optgroup>
 
-                <optgroup label="Flippers">
-                  <option data-switch-class="flip">flip</option>
-                  <option data-switch-class="flipInX">flipInX</option>
-                  <option data-switch-class="flipInY">flipInY</option>
-                  <option data-switch-class="flipOutX">flipOutX</option>
-                  <option data-switch-class="flipOutY">flipOutY</option>
-                </optgroup>
+            <optgroup label="Flippers">
+              <option data-switch-class="flip">flip</option>
+              <option data-switch-class="flipInX">flipInX</option>
+              <option data-switch-class="flipInY">flipInY</option>
+              <option data-switch-class="flipOutX">flipOutX</option>
+              <option data-switch-class="flipOutY">flipOutY</option>
+            </optgroup>
 
-                <optgroup label="Lightspeed">
-                  <option data-switch-class="lightSpeedIn">lightSpeedIn</option>
-                  <option data-switch-class="lightSpeedOut">lightSpeedOut</option>
-                </optgroup>
+            <optgroup label="Lightspeed">
+              <option data-switch-class="lightSpeedIn">lightSpeedIn</option>
+              <option data-switch-class="lightSpeedOut">lightSpeedOut</option>
+            </optgroup>
 
-                <optgroup label="Rotating Entrances">
-                  <option data-switch-class="rotateIn">rotateIn</option>
-                  <option data-switch-class="rotateInDownLeft">rotateInDownLeft</option>
-                  <option data-switch-class="rotateInDownRight">rotateInDownRight</option>
-                  <option data-switch-class="rotateInUpLeft">rotateInUpLeft</option>
-                  <option data-switch-class="rotateInUpRight">rotateInUpRight</option>
-                </optgroup>
+            <optgroup label="Rotating Entrances">
+              <option data-switch-class="rotateIn">rotateIn</option>
+              <option data-switch-class="rotateInDownLeft">rotateInDownLeft</option>
+              <option data-switch-class="rotateInDownRight">rotateInDownRight</option>
+              <option data-switch-class="rotateInUpLeft">rotateInUpLeft</option>
+              <option data-switch-class="rotateInUpRight">rotateInUpRight</option>
+            </optgroup>
 
-                <optgroup label="Rotating Exits">
-                  <option data-switch-class="rotateOut">rotateOut</option>
-                  <option data-switch-class="rotateOutDownLeft">rotateOutDownLeft</option>
-                  <option data-switch-class="rotateOutDownRight">rotateOutDownRight</option>
-                  <option data-switch-class="rotateOutUpLeft">rotateOutUpLeft</option>
-                  <option data-switch-class="rotateOutUpRight">rotateOutUpRight</option>
-                </optgroup>
+            <optgroup label="Rotating Exits">
+              <option data-switch-class="rotateOut">rotateOut</option>
+              <option data-switch-class="rotateOutDownLeft">rotateOutDownLeft</option>
+              <option data-switch-class="rotateOutDownRight">rotateOutDownRight</option>
+              <option data-switch-class="rotateOutUpLeft">rotateOutUpLeft</option>
+              <option data-switch-class="rotateOutUpRight">rotateOutUpRight</option>
+            </optgroup>
 
-                <optgroup label="Sliders">
-                  <option data-switch-class="slideInDown">slideInDown</option>
-                  <option data-switch-class="slideInLeft">slideInLeft</option>
-                  <option data-switch-class="slideInRight">slideInRight</option>
-                  <option data-switch-class="slideOutLeft">slideOutLeft</option>
-                  <option data-switch-class="slideOutRight">slideOutRight</option>
-                  <option data-switch-class="slideOutUp">slideOutUp</option>
-                </optgroup>
+            <optgroup label="Sliders">
+              <option data-switch-class="slideInDown">slideInDown</option>
+              <option data-switch-class="slideInLeft">slideInLeft</option>
+              <option data-switch-class="slideInRight">slideInRight</option>
+              <option data-switch-class="slideOutLeft">slideOutLeft</option>
+              <option data-switch-class="slideOutRight">slideOutRight</option>
+              <option data-switch-class="slideOutUp">slideOutUp</option>
+            </optgroup>
 
-                <optgroup label="Specials">
-                  <option data-switch-class="hinge">hinge</option>
-                  <option data-switch-class="rollIn">rollIn</option>
-                  <option data-switch-class="rollOut">rollOut</option>
-                </optgroup>
-              </select>
+            <optgroup label="Specials">
+              <option data-switch-class="hinge">hinge</option>
+              <option data-switch-class="rollIn">rollIn</option>
+              <option data-switch-class="rollOut">rollOut</option>
+            </optgroup>
+          </select>
 
-              <hr class="line">
+          <div class="bottom-line"></div>
 
-              <h2>Mouse enter/out</h2>
+          <h2>Mouse enter/out</h2>
 
-              <div data-switch="#example1" data-switch-event="mouseenter mouseout">
-                Move your mouse into this div tag area here...
-              </div>
+          <div data-switch="#example1" data-switch-event="mouseenter mouseout">
+            Move your mouse into this div tag area here...
+          </div>
 
-              <hr class="line">
+          <div class="bottom-line"></div>
 
-              <h2>Select a photo</h2>
+          <h2 name="toggle-custom-classes">Toggle custom classes <small>(yellow - green - blue)</small></h2>
 
-              <div class="frame-section">
-                <div class="frame one transition" data-switch-off=".about,.frame" data-switch-on=".frame.one,.about.one,.frame-section">
-                  <span class="valign"></span>
-                  <img class="photo" src="http://placekitten.com/g/200/300">
-                </div>
-                <div class="frame two transition" data-switch-off=".about,.frame" data-switch-on=".frame.two,.about.two,.frame-section">
-                  <span class="valign"></span>
-                  <img class="photo" src="http://placekitten.com/g/200/350">
-                </div>
-                <div class="frame three transition" data-switch-off=".about,.frame" data-switch-on=".frame.three,.about.three,.frame-section">
-                  <span class="valign"></span>
-                  <img class="photo" src="http://placekitten.com/g/200/140">
-                </div>
-                <div class="frame four transition" data-switch-off=".about,.frame" data-switch-on=".frame.four,.about.four,.frame-section">
-                  <span class="valign"></span>
-                  <img class="photo" src="http://placekitten.com/g/200/200">
-                </div>
-              </div>
+          <p style="font-style: italic; color: #F33">Make sure that .active is off or you will only see a RED background-color</p>
 
-              <div class="about-section">
-                <div class="about fade-in transition one">
-                  <span class="bold">No javascript here, bub!</span>
-                  <p>You can use different toggles and combine them to make a powerful combination of display logic.</p>
-                </div>
+          <a href="#toggle-custom-classes" data-switch-prev="#example1" data-switch-class="
+          [yellow,green,blue]">Previous Color</a> |
+          <a href="#toggle-custom-classes" data-switch-next="#example1" data-switch-class="
+          [yellow,green,blue]">Next Color</a> |
+          <a href="#toggle-custom-classes" data-switch="#example1" data-switch-class="[solid red-border,dashed purple-border]">Toggle Border</a>
 
-                <div class="about fade-in transition two">
-                  <span class="bold">What is the order of execution though when you have multiple events?</span>
-                  <p>The important thing to remember is the default event ordering is,</p>
-                  <ol>
-                    <li>toggle</li>
-                    <li>toggle-off</li>
-                    <li>toggle-on</li>
-                  </ol>
-                </div>
-                <div class="about fade-in transition three">
-                  <span class="bold">Change <code>eventOrdering</code> for different event pattern</span>
-                  <p>You can always change this in the defaults though by changing <code>$.fn.switcheroo.defaults.eventOrdering</code></p>
-                </div>
-                <div class="about fade-in transition four">
-                  <span class="bold">I leave you with, a lovely poem</span>
-                  <p>When you see a cat walking on the moon, did he have a dish and silver spoon? A dog who laughed and cow who was fat, never saw them again after that.</p>
-                <div>
-              </div>
+          <br>
+          <br>
 
+          <a href="#toggle-custom-classes" data-switch-off="#example1" data-switch-class="
+          [yellow,green,blue]">Turn Color Yellow</a> |
+          <a href="#toggle-custom-classes" data-switch-on="#example1" data-switch-to="green" data-switch-class="
+          [yellow,green,blue]">Turn Color Green</a> |
+          <a href="#toggle-custom-classes" data-switch-on="#example1" data-switch-class="
+          [yellow,green,blue]">Turn Color Blue</a>
+
+          <br>
+          <br>
+
+          <a href="#toggle-custom-classes" data-switch-prev="#example1" data-switch-class="
+          [yellow,green,blue]" data-switch-no-loop>Previous Color, Stop At Yellow</a> |
+
+          <a href="#toggle-custom-classes" data-switch-next="#example1" data-switch-class="
+          [yellow,green,blue]" data-switch-no-loop>Next Color, Stop At Blue</a>
+
+          <div class="bottom-line"></div>
+
+          <h2>Select a photo</h2>
+
+          <div class="frame-section">
+            <div class="frame one transition" data-switch-off=".about,.frame" data-switch-on=".frame.one,.about.one,.frame-section">
+              <span class="valign"></span>
+              <img class="photo" src="http://placekitten.com/g/200/300">
             </div>
-            <div class="col-sm-4">
-              <div data-spy="affix" data-offset-top="0">
-                  <div id="example1" class="example animated">When active I turn yellow</div>
-              </div>
+            <div class="frame two transition" data-switch-off=".about,.frame" data-switch-on=".frame.two,.about.two,.frame-section">
+              <span class="valign"></span>
+              <img class="photo" src="http://placekitten.com/g/200/350">
+            </div>
+            <div class="frame three transition" data-switch-off=".about,.frame" data-switch-on=".frame.three,.about.three,.frame-section">
+              <span class="valign"></span>
+              <img class="photo" src="http://placekitten.com/g/200/140">
+            </div>
+            <div class="frame four transition" data-switch-off=".about,.frame" data-switch-on=".frame.four,.about.four,.frame-section">
+              <span class="valign"></span>
+              <img class="photo" src="http://placekitten.com/g/200/200">
+            </div>
+          </div>
+
+          <div class="about-section">
+            <div class="about fade-in transition one">
+              <span class="bold">No javascript here, bub!</span>
+              <p>You can use different toggles and combine them to make a powerful combination of display logic.</p>
+            </div>
+
+            <div class="about fade-in transition two">
+              <span class="bold">What is the order of execution though when you have multiple events?</span>
+              <p>The important thing to remember is the default event ordering is,</p>
+              <ol>
+                <li>toggle</li>
+                <li>toggle-off</li>
+                <li>toggle-on</li>
+              </ol>
+            </div>
+            <div class="about fade-in transition three">
+              <span class="bold">Change <code>eventOrdering</code> for different event pattern</span>
+              <p>You can always change this in the defaults though by changing <code>$.fn.switcheroo.defaults.eventOrdering</code></p>
+            </div>
+            <div class="about fade-in transition four">
+              <span class="bold">I leave you with, a lovely poem</span>
+              <p>When you see a cat walking on the moon, did he have a dish and silver spoon? A dog who laughed and cow who was fat, never saw them again after that.</p>
             </div>
           </div>
         </section>
@@ -254,7 +274,10 @@
 
           <p class="repo-owner"><a href="https://github.com/kdocki/jquery.switcheroo"></a> is maintained by <a href="https://github.com/kdocki">kdocki</a>.</p>
 
-          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+          <div data-spy="affix" data-offset-top="0">
+              <div id="example1" class="example animated">When active I turn red</div>
+          </div>
+
         </aside>
       </div>
     </div>
