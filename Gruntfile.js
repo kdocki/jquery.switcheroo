@@ -6,7 +6,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     bowerInstall: {
       target: {
-      	src: [ 'examples/*.html' ]
+      	src: [ 'examples/*.html', 'index.html' ]
       }
     },
     watch: {
