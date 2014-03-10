@@ -6,14 +6,15 @@ module.exports = function(grunt) {
   grunt.initConfig({
     bowerInstall: {
       target: {
-      	src: [ 'examples/*.html', 'index.html' ]
+      	src: [ 'examples/*.html' ]
       }
     },
     watch: {
       livereload: {
         files: [
-          'examples/**',
-          "jquery.switcheroo.js"
+          "examples/**",
+          "jquery.switcheroo.js",
+	  "index.html"
         ],
         options: {
           livereload: true

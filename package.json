@@ -1,0 +1,19 @@
+{
+  "name": "jquery.toggler",
+  "version": "0.0.0",
+  "description": "",
+  "main": "jquery.toggler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "grunt-bower-install": "~1.0.1",
+    "grunt": "~0.4.1",
+    "grunt-contrib-compass": "~0.2.0",
+    "grunt-contrib-watch": "~0.4.3",
+    "grunt-contrib-uglify": "~0.2.0",
+    "matchdep": "~0.1.2"
+  }
+}
