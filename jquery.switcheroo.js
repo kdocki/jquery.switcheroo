@@ -2,7 +2,6 @@
  * @author  Kelt <kelt@dockins.org>
  * @license  MIT
  */
-var global;
 (function($)
 {
 	/**
@@ -78,7 +77,7 @@ var global;
 	 * Defaults for this plugin
 	 *
 	 */
-global=	$.fn.switcheroo.defaults =
+	$.fn.switcheroo.defaults =
 	{
 		// order of event calls
 		eventOrdering 	: ['revert', 'toggle', 'off', 'on', 'prev', 'next'],
@@ -147,7 +146,7 @@ global=	$.fn.switcheroo.defaults =
 			off: function(toggle)
 			{
 				var to = toggle.classes.to ? toggle.classes.to : toggle.classes.all;
-				
+
 				toggle.selected.removeClass(to)
 				toggle.selected.addClass(toggle.classes.first);
 			},
@@ -407,7 +406,7 @@ global=	$.fn.switcheroo.defaults =
 		var event = toggle.event;
 
 		handlerName = settings.handlerOverride(event, handlerName);
-		
+
 		if (typeof settings.handlers[handlerName] === 'undefined')
 		{
 			console.warn('Could not find handler for ' + handlerName, toggle.element, settings);
@@ -603,7 +602,7 @@ global=	$.fn.switcheroo.defaults =
 					selected.removeClass(toggleClasses[current]);
 				}
 
-				selected.addClass(toggleClasses[next]);				
+				selected.addClass(toggleClasses[next]);
 			});
 		};
 	}
@@ -611,7 +610,7 @@ global=	$.fn.switcheroo.defaults =
 	/**
 	 * Returns the current index of our toggle class
 	 * for the given element. Needs to be a singular element.
-	 * 
+	 *
 	 */
 	function getCurrentToggleClassIndex(element, toggleClasses)
 	{
@@ -654,9 +653,9 @@ global=	$.fn.switcheroo.defaults =
 	/**
 	 * Javascript modulus function returns negative numbers
 	 * for negative moduli, and even though this is correct
-	 * we want to constrict the range from 0 to n - 1, so 
+	 * we want to constrict the range from 0 to n - 1, so
 	 * we need to use this function instead of just %.
-	 * 
+	 *
 	 */
 	function mod(x, n)
 	{
