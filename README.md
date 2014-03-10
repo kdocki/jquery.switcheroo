@@ -2,7 +2,11 @@
 
 What is it? What is it good for? *huggh* absolutely nothing. This is meant to be a dropin for toggles and switches. It works much like how the Gumby framework handles toggles and switches.
 
-### View some [examples here](http://github.com).
+## Examples
+
+Showing *is better* than telling. Don't believe me? Just ask [the teacher](http://youtu.be/UXQYcNSNIb8?t=1m26s).
+
+So go ahead and check out the examples at **http://kdocki.github.io/jquery.switcheroo**.
 
 ## Quickstart
 
@@ -53,7 +57,7 @@ $.fn.switcheroo.defaults =
 	initDefault		: 'body',
 
 	// these classes are toggled back and forth
-	toggleClasses		: ['', 'active'],
+	toggleClasses	: ['', 'active'],
 
 	// all event types we will listen for globally on registered DOM element
 	eventTypes		: 'click dblclick change focusin focusout mousedown mouseup mouseover mousemove mouseenter mouseout dragstart drag dragenter dragleave dragover drop dragend keypress keyup',
@@ -73,23 +77,23 @@ $.fn.switcheroo.defaults =
 	eventOverrides	: {
 		'focusin'	: 'on',
 		'focusout'	: 'off',
-		'mouseenter'	: 'on',
+		'mouseenter': 'on',
 		'mouseout'	: 'off'
 	},
 
 	// this is how we know which elements to select from the DOM
 	selectors		: {
-		toggle		: "data-switch",
+		toggle			: "data-switch",
 		toggleClass 	: "data-switch-class",
 		originalClass 	: "data-switch-original-class",
-		to 		: "data-switch-to",
-		eventType 	: "data-switch-event",
-		init 		: "data-switch-init",
-		registered 	: "data-switch-registered",
-		noloop		: "data-switch-no-loop"
+		to 				: "data-switch-to",
+		eventType 		: "data-switch-event",
+		init 			: "data-switch-init",
+		registered 		: "data-switch-registered",
+		noloop			: "data-switch-no-loop"
 	},
 
-	// handlers are how we handle our different toggle events
+	// handlers are how we handle our toggle event
 	handlers: {
 		toggle: function(toggle)
 	 	{
@@ -135,7 +139,7 @@ $.fn.switcheroo.defaults =
 	},
 
 	// shortcut method to get the selector name
-	selector 	: getSelector,
+	selector 		: getSelector,
 
 	// allows us to override the handler for specific cases, i.e. checkbox/textarea
 	handlerOverride	: getEventHandlerName
