@@ -1,11 +1,11 @@
 {
-  "name": "jquery.toggler",
-  "version": "0.0.0",
+  "name": "jquery.switcheroo",
+  "version": "1.0.0",
   "authors": [
     "Kelt Dockins <kelt@dockins.org>"
   ],
   "license": "MIT",
-  "private": true,
+  "private": false,
   "ignore": [
     "**/.*",
     "node_modules",
@@ -14,7 +14,7 @@
     "tests"
   ],
   "main": [
-    "jquery.toggler.js"
+    "jquery.switcheroo.js"
   ],
   "dependencies": {
     "jquery": "~1.11.0",
