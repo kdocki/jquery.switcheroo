@@ -1,13 +1,13 @@
 {
-  "name": "jquery.toggler",
+  "name": "jquery.switcheroo",
   "version": "0.0.0",
   "description": "",
-  "main": "jquery.toggler.js",
+  "main": "jquery.switcheroo.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Kelt Dockins",
+  "license": "MIT",
   "devDependencies": {
     "grunt-bower-install": "~1.0.1",
     "grunt": "~0.4.1",
