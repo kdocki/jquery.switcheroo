@@ -1,7 +1,7 @@
 # jquery.switcheroo
 
 
-### DO NOT USE THIS PLUGIN, USE [jquery.toodles](https://github.com/kdocki/jquery.toodles) INSTEAD...
+### DEPRECIATED! DO NOT USE THIS PLUGIN, USE [jquery.toodles](https://github.com/kdocki/jquery.toodles) INSTEAD...
 
 What is it? What is it good for? *huggh* absolutely nothing. This is meant to be a dropin for toggles and switches. It works much like how the Gumby framework handles toggles and switches.
 
